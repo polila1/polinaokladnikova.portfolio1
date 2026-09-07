@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Project card — demo</title>
+<link rel="stylesheet" href="../../tokens/index.css" />
+<link rel="stylesheet" href="./project-card.css" />
+<style>
+  body {
+    margin: 0;
+    background: var(--color-surface-background);
+    display: flex;
+    justify-content: center;
+    padding: var(--space-l) var(--space-m);
+  }
+  .wrap { width: 100%; max-width: 1100px; }
+
+  /* Demo-only placeholder: the real Figma case screenshot could not be fetched
+     into this environment (network access to the Figma asset host is blocked here).
+     Swap this div for a real <img> — see project-card.html. */
+  .placeholder-media {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-surface-background);
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-text);
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <article class="project-card">
+      <div class="project-card__media">
+        <div class="placeholder-media">case image · 1100 × 650</div>
+      </div>
+      <div class="project-card__body">
+        <p class="project-card__date">March – July 2026</p>
+        <div class="project-card__content">
+          <h2 class="project-card__title">The university ecosystem</h2>
+          <p class="project-card__description">UNISYNC — the university experience as one connected digital ecosystem — combining academic tools, campus services, and student life in a simple and intuitive mobile app</p>
+        </div>
+      </div>
+    </article>
+  </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+/**
+ * Color tokens
+ * Source: Figma variables → design.tokens.json (mode: "design")
+ * Do not hardcode hex values in components — always reference these variables.
+ */
+
+:root {
+  /* Surface */
+  --color-surface-background: #111111;
+  --color-surface-link: #FF95C2;
+
+  /* Text */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #AAAAAA; /* updated 2026-08-25, was #5C5C5C — color/text/secondary lightened in Figma */
+}

@@ -1,0 +1,42 @@
+<!--
+  Usage snippet: Experience card
+  - .experience-card__logo: a 40×40px <img> per entry, pointing at the company's
+    logo asset in /images (e.g. images/foxford.png). The source PNGs are already
+    circular with their own fill color, so no CSS clipping/background is applied.
+  - .experience-card__marker is a CSS-drawn stand-in for the Figma bullet icon
+    (asset couldn't be fetched — see claude.md). Replace with the real SVG later.
+-->
+
+<article class="experience-card">
+  <div class="experience-card__brand">
+    <span class="experience-card__logo">
+      <img src="images/foxford.png" alt="" />
+    </span>
+    <span class="experience-card__brand-name">
+      <span class="header-nav-item__label">Foxford</span>
+    </span>
+  </div>
+
+  <div class="experience-card__role">
+    <h3 class="experience-card__title">Product Designer</h3>
+    <div class="experience-card__details">
+      <p class="experience-card__summary">Foxford — online school platform for students from primary to high school (6.5M+ registered users)</p>
+      <ul class="experience-card__list">
+        <li class="experience-card__item">
+          <span class="experience-card__marker" aria-hidden="true"></span>
+          <p class="experience-card__item-text">Identified 3 usability issues in the registration flow by conducting user interviews with 8 participants</p>
+        </li>
+        <li class="experience-card__item">
+          <span class="experience-card__marker" aria-hidden="true"></span>
+          <p class="experience-card__item-text">Built a reusable UI kit, ensuring visual consistency across 10+ app screens</p>
+        </li>
+        <li class="experience-card__item">
+          <span class="experience-card__marker" aria-hidden="true"></span>
+          <p class="experience-card__item-text">Improved onboarding completion by 15% by simplifying a multi-step form into a single-page layout</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="experience-card__period">June 2026 –<br />present</p>
+</article>

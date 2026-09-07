@@ -1,0 +1,28 @@
+<!--
+  Usage snippet: for-hovering
+  1. Load the CSS and JS once per page (order doesn't matter between them, but
+     both must come after /tokens/index.css):
+
+     <link rel="stylesheet" href="components/for-hovering/for-hovering.css" />
+     <script src="components/for-hovering/for-hovering.js" defer></script>
+
+  2. Mark any element that should swap the cursor on hover — no wrapper markup
+     needed, just an attribute on the existing element:
+
+     data-hover-cursor="see-case"   → shows images/case.png
+     data-hover-cursor="its-me"     → shows images/me.png
+
+  That's it — for-hovering.js finds every [data-hover-cursor] element on the
+  page automatically and wires it up. Nothing to add if a page doesn't use
+  either attribute (the script no-ops).
+-->
+
+<!-- Example: the case image on the homepage -->
+<div class="project-card__media" data-hover-cursor="see-case">
+  <img src="images/case%20image%201.png" alt="UNISYNC app screens" />
+</div>
+
+<!-- Example: Polina's photo on the About page -->
+<div class="about__photo" data-hover-cursor="its-me">
+  <img src="images/photo%20big.png" alt="Polina" />
+</div>

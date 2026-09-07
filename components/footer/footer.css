@@ -1,0 +1,16 @@
+/**
+ * Component: Footer
+ * Figma source: node 822:1387 "footer" — a row of header-nav-item instances.
+ * Same building block as /components/header, different gap and alignment:
+ * header uses --space-l + align-items:center; footer uses --space-m + align-items:flex-start
+ * (as specified in the Figma node).
+ *
+ * Requires /tokens/index.css AND /components/header-nav-item/header-nav-item.css
+ * to be loaded on the page before this file.
+ */
+
+.footer {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-m);
+}

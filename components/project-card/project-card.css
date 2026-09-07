@@ -1,0 +1,142 @@
+/**
+ * Component: Project card
+ * Figma source: node 822:1411 "project card" — case image + date + title + description.
+ *
+ * Requires /tokens/index.css to be loaded on the page before this file.
+ *
+ * Not tokenized, taken directly from the Figma spec (component-local constants,
+ * see claude.md §5):
+ * - .project-card__media aspect-ratio: derived from the Figma frame (1100×650 → 1100/650),
+ *   used instead of a fixed height so the image scales with the card's width.
+ * - letter-spacing: -0.5px on date/description — a fixed value in the spec, not a
+ *   percentage like header-nav-item's, so it isn't expressed as a calc().
+ * - .project-card__description max-width: 68% — matches the Figma ratio (747px of
+ *   1100px card width), kept as a share of the card so it stays proportional at
+ *   other card widths instead of a fixed px column.
+ *
+ * Added 2026-08-24: .project-card__media now uses --radius-xl (40px) — Figma added
+ * a rounding/xl variable to this node's corner radius, matching the new /tokens/radius.css.
+ *
+ * Added 2026-08-24 (second update, same day): hover micro-interaction on the case
+ * image — not from Figma (no motion tokens yet, see claude.md §7). Hovering
+ * .project-card__media shrinks it slightly (scale 0.96) and eases back to full size
+ * on mouse-out.
+ *
+ * Fixed 2026-08-24 (third update, same day): the scale must be applied to
+ * .project-card__media itself, NOT to the inner <img> — scaling just the img left a
+ * gap between the (unscaled) rounded container and the (shrunk) image, revealing the
+ * container's --color-text-secondary background as an unwanted grey frame. Scaling
+ * the whole container instead shrinks the border-radius edge and the image together,
+ * so no gap ever appears. transform doesn't affect layout flow, so this doesn't
+ * shift anything below the card.
+ *
+ * Updated 2026-08-25: token scale renumbered (see /tokens/spacing.css). Figma's gaps
+ * on this node didn't change, but the token step that matches them did — .project-card,
+ * .project-card__body and .project-card__content each shift down one tier (m→s, s→xs,
+ * xs→xxs respectively). Also: the h3/body Figma text styles now specify letterSpacing:
+ * 0 (confirmed via fresh get_design_context on node 810:462), so the -0.5px fixed
+ * letter-spacing on date/description is removed.
+ */
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-s);
+  width: 100%;
+}
+
+.project-card__media {
+  width: 100%;
+  aspect-ratio: 1100 / 650;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--color-text-secondary);
+  transition: transform 300ms ease;
+}
+
+.project-card__media:hover {
+  transform: scale(0.96);
+}
+
+.project-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-card__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  width: 100%;
+}
+
+.project-card__date {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-text);
+  font-size: var(--font-size-body);
+  line-height: 1.3;
+  letter-spacing: 0; /* updated 2026-08-25, was -0.5px — Figma body style specifies letterSpacing: 0 */
+}
+
+.project-card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xxs);
+  width: 100%;
+  color: var(--color-text-primary);
+}
+
+.project-card__title {
+  margin: 0;
+  color: inherit;
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-h2);
+  font-size: var(--font-size-h2);
+  line-height: 1.1;
+}
+
+.project-card__description {
+  margin: 0;
+  max-width: 68%;
+  color: inherit;
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-text);
+  font-size: var(--font-size-body);
+  line-height: 1.3;
+  letter-spacing: 0; /* updated 2026-08-25, was -0.5px — Figma body style specifies letterSpacing: 0 */
+}
+
+@media (max-width: 640px) {
+  .project-card__description {
+    max-width: 100%;
+  }
+
+  /* Mobile main screen — Figma node 884:393 "main screen mobile" (added
+     2026-09-07). Gaps match the "mobile" Figma variable mode (indent/xs=10,
+     indent/xxs=6 — see claude.md §4/§5); the title size/weight are literal
+     values read off that node, not tied to the h2 style token there. */
+  .project-card {
+    gap: 10px; /* indent/xs (mobile), was var(--space-s)/20px */
+  }
+  .project-card__body {
+    gap: 6px; /* indent/xxs (mobile), was var(--space-xs)/12px */
+  }
+  .project-card__content {
+    gap: 6px; /* indent/xxs (mobile), was var(--space-xxs)/8px */
+  }
+  .project-card__date,
+  .project-card__description {
+    font-size: 16px; /* font/size/body (mobile), was var(--font-size-body)/20px */
+  }
+  .project-card__title {
+    font-size: 24px; /* literal Figma value for this node, not --font-size-h2 (40px desktop / 32px mobile-token) */
+    font-weight: 700; /* Bold, literal — differs from desktop's --font-weight-h2 (500 Medium) */
+  }
+}

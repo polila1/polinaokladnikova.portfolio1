@@ -1,0 +1,86 @@
+/**
+ * Component: For hovering
+ * Figma source: node 858:3092 "Hovering" (fileKey RzqvgS1t3QHAGL0XP8CT3x),
+ * variants property1: "case" | "me". Replaces the native mouse cursor while
+ * hovering specific elements: the case image on the homepage
+ * (project-card__media) swaps in the "case" image; Polina's photo on the
+ * About page (about__photo) swaps in the "me" image.
+ *
+ * CORRECTED: an earlier build against node 857:3078 ("for hovering") drew a
+ * CSS pointer icon + pill + live JS-set text label. That structure did not
+ * match this reference — the real component is a single flat image per
+ * variant, no drawn shapes and no text. See claude.md §5 for the correction
+ * note. The image assets (images/case.png, images/me.png) were supplied
+ * directly by the user, so the earlier "asset couldn't be downloaded"
+ * limitation no longer applies to this component.
+ *
+ * Requires /tokens/index.css AND for-hovering.js to be loaded on the page.
+ * JS creates one shared .for-hovering element, swaps its <img> src, and
+ * moves it on hover of any element carrying a
+ * data-hover-cursor="see-case" | "its-me" attribute — see for-hovering.js
+ * and for-hovering.html.
+ *
+ * Not tokenized, taken directly from the Figma spec (component-local
+ * constant, see claude.md §5): the container's fixed 112.658×50px size —
+ * this is a small fixed-size cursor widget, not a layout that should scale
+ * with anything.
+ */
+
+.for-hovering {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 112.658px;
+  height: 50px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  transform: translate(-9999px, -9999px); /* parked off-screen until JS moves it on hover */
+}
+
+.for-hovering--visible {
+  opacity: 1;
+}
+
+.for-hovering__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Hides the native cursor only once for-hovering.js has actually attached the
+   custom cursor on hover (a class it toggles) — not a blanket :hover rule, so a
+   JS failure leaves the real cursor visible instead of hiding it with nothing
+   to replace it. See for-hovering.js. */
+[data-hover-cursor].for-hovering-target--active {
+  cursor: none;
+}
+
+/* Added 2026-09-07, by direct request: this custom-cursor effect only makes
+   sense for a real mouse pointer — on mobile (≤640px, same breakpoint as the
+   rest of the site's mobile layout) there's no hover state to replace, so the
+   image would otherwise appear "stuck" wherever a touch last landed. Hiding
+   the shared cursor element outright (rather than touching for-hovering.js)
+   disables it on both places that use it — the About page photo and the
+   homepage project-card image — without needing separate per-page logic. */
+@media (max-width: 640px) {
+  .for-hovering {
+    display: none !important;
+  }
+
+  /* Fixed 2026-09-08, by direct request ("почему при наведении на фото в
+     мобильной версии пропадает курсор?"): hiding .for-hovering above only
+     hid the replacement image — it didn't stop for-hovering.js from still
+     adding .for-hovering-target--active on "mouseenter" (which a touchscreen
+     laptop, a tablet with a trackpad/mouse, or simply a resized desktop
+     browser window all still fire), and the cursor:none rule above is a
+     plain (non-mobile-scoped) selector, so it kept applying: the real
+     system cursor vanished with no image left to replace it. Resetting it
+     back to the default cursor here, inside the same breakpoint, closes
+     that gap without touching the JS. */
+  [data-hover-cursor].for-hovering-target--active {
+    cursor: auto;
+  }
+}

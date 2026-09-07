@@ -1,0 +1,35 @@
+/**
+ * Spacing tokens (indent)
+ * Source: Figma variables → design.tokens.json (mode: "design")
+ * Use for margins, paddings and gaps instead of raw px values.
+ *
+ * Updated 2026-08-25: the whole scale was renumbered in Figma — two new steps
+ * were added at each end (xxxl, xxxs) and several existing steps changed VALUE
+ * while keeping their NAME, tracked here by Figma's stable variableId (see
+ * design.tokens.json / claude.md §4 for the full before/after table):
+ * - indent/xxxl (852:2873) — NEW, 360px (this is the old indent/xxl's value).
+ * - indent/xxl (838:2764) — same variable as before, value 360px → 120px.
+ * - indent/xl (815:335) — same variable as before, value 120px → 100px.
+ * - indent/l (815:336) and indent/m (815:337) — unchanged (80px, 40px).
+ * - indent/s (815:338) — same variable as before, value 12px → 20px.
+ * - indent/xs (815:339) — same variable as before, value 8px → 12px.
+ * - indent/xxs (815:376) — same variable as before, value 4px → 8px.
+ * - indent/xxxs (852:2891) — NEW, 4px (this is the old indent/xxs's value).
+ * Every CSS variable below keeps its name matched to the Figma token name — no
+ * renames on our side — so this update is a value-only change. Anywhere that
+ * already used var(--space-xxl) or var(--space-xl) etc. picks up the new
+ * number automatically; nothing in /components or the pages needed editing for
+ * the token update itself (see claude.md §8/§9 for any follow-up visual fixes).
+ */
+
+:root {
+  --space-xxxl: 360px;
+  --space-xxl: 120px;
+  --space-xl: 100px;
+  --space-l: 80px;
+  --space-m: 40px;
+  --space-s: 20px;
+  --space-xs: 12px;
+  --space-xxs: 8px;
+  --space-xxxs: 4px;
+}

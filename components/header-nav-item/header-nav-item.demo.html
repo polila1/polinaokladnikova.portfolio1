@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Header nav item — demo</title>
+<link rel="stylesheet" href="../../tokens/index.css" />
+<link rel="stylesheet" href="./header-nav-item.css" />
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-l);
+    background: var(--color-surface-background);
+  }
+  .demo-item { display: flex; flex-direction: column; align-items: center; gap: var(--space-s); }
+  .demo-caption {
+    font-family: var(--font-family-text);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+  }
+</style>
+</head>
+<body>
+  <div class="demo-item">
+    <span class="demo-caption">default</span>
+    <a class="header-nav-item" href="#work">
+      <span class="header-nav-item__label">Work</span>
+    </a>
+  </div>
+  <div class="demo-item">
+    <span class="demo-caption">hovering — наведи</span>
+    <a class="header-nav-item" href="#work">
+      <span class="header-nav-item__label">Work</span>
+    </a>
+  </div>
+  <div class="demo-item">
+    <span class="demo-caption">active</span>
+    <a class="header-nav-item header-nav-item--active" href="#work" aria-current="page">
+      <span class="header-nav-item__label">Work</span>
+    </a>
+  </div>
+</body>
+</html>

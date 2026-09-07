@@ -1,0 +1,34 @@
+/**
+ * Component: Header
+ * Figma source: node 815:384 "header" — a row of header-nav-item instances.
+ * This is a composition, not a new set of styles: it lays out header-nav-item
+ * (see /components/header-nav-item) with a single token for the gap.
+ *
+ * Requires /tokens/index.css AND /components/header-nav-item/header-nav-item.css
+ * to be loaded on the page before this file.
+ *
+ * Updated 2026-08-24: gap changed from --space-l (80px) to --space-xl (120px) —
+ * re-checked against the current Figma node and it now specifies indent/xl, not indent/l.
+ */
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);
+}
+
+/* Responsive addition, not from Figma (no breakpoint tokens yet): --space-xl
+   (120px) between 3 nav items overflows narrow viewports. Tighten the gap
+   instead of letting items overlap or force horizontal scroll. */
+@media (max-width: 900px) {
+  .header {
+    gap: var(--space-l);
+  }
+}
+@media (max-width: 640px) {
+  .header {
+    gap: var(--space-m);
+  }
+}

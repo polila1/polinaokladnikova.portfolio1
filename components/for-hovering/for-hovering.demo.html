@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>For hovering — demo</title>
+<link rel="stylesheet" href="../../tokens/index.css" />
+<link rel="stylesheet" href="./for-hovering.css" />
+<style>
+  body {
+    margin: 0;
+    background: var(--color-surface-background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-l);
+    padding: var(--space-l) var(--space-m);
+    font-family: var(--font-family-text);
+  }
+  .prose { color: var(--color-text-secondary); margin: 0; text-align: center; max-width: 480px; }
+  .row { display: flex; gap: var(--space-m); flex-wrap: wrap; justify-content: center; }
+  .box {
+    width: 320px;
+    height: 200px;
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-surface-background);
+    font-family: var(--font-family-text);
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .box--see-case { background: var(--color-text-secondary); }
+  .box--its-me { background: var(--color-surface-link); }
+</style>
+</head>
+<body>
+  <p class="prose">Наведите курсор на любой блок ниже — системный курсор скрывается, вместо него показывается компонент for-hovering с нужной картинкой.</p>
+  <div class="row">
+    <div class="box box--see-case" data-hover-cursor="see-case">project-card__media (index.html)</div>
+    <div class="box box--its-me" data-hover-cursor="its-me">about__photo (about.html)</div>
+  </div>
+
+  <script src="./for-hovering.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Experience card — demo</title>
+<link rel="stylesheet" href="../../tokens/index.css" />
+<link rel="stylesheet" href="../header-nav-item/header-nav-item.css" />
+<link rel="stylesheet" href="./experience-card.css" />
+<style>
+  body {
+    margin: 0;
+    background: var(--color-surface-background);
+    display: flex;
+    justify-content: center;
+    padding: var(--space-l) var(--space-m);
+  }
+  .wrap { width: 100%; max-width: 1100px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <article class="experience-card">
+      <div class="experience-card__brand">
+        <span class="experience-card__logo" style="--experience-card-logo-bg:#FFEACA;">
+          <span class="experience-card__logo-fallback">F</span>
+        </span>
+        <span class="experience-card__brand-name">
+          <span class="header-nav-item__label">Foxford</span>
+        </span>
+      </div>
+
+      <div class="experience-card__role">
+        <h3 class="experience-card__title">Product Designer</h3>
+        <div class="experience-card__details">
+          <p class="experience-card__summary">Foxford — online school platform for students from primary to high school (6.5M+ registered users)</p>
+          <ul class="experience-card__list">
+            <li class="experience-card__item">
+              <span class="experience-card__marker" aria-hidden="true"></span>
+              <p class="experience-card__item-text">Identified 3 usability issues in the registration flow by conducting user interviews with 8 participants</p>
+            </li>
+            <li class="experience-card__item">
+              <span class="experience-card__marker" aria-hidden="true"></span>
+              <p class="experience-card__item-text">Built a reusable UI kit, ensuring visual consistency across 10+ app screens</p>
+            </li>
+            <li class="experience-card__item">
+              <span class="experience-card__marker" aria-hidden="true"></span>
+              <p class="experience-card__item-text">Improved onboarding completion by 15% by simplifying a multi-step form into a single-page layout</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="experience-card__period">June 2026 –<br />present</p>
+    </article>
+  </div>
+</body>
+</html>

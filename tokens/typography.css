@@ -1,0 +1,50 @@
+/**
+ * Typography tokens
+ * Source: Figma variables → design.tokens.json (mode: "design")
+ * "style" values from Figma (Light/Medium/Bold) map to CSS font-weight below.
+ * Last synced: 2026-08-25
+ *
+ * Added 2026-08-25: font/font family/accent (VariableID:857:3083) and
+ * font/size/accent (16px, VariableID:857:3084) — brand-new variables, nothing else
+ * in the file changed (confirmed via diff against the previous design.tokens.json,
+ * tracked by variableId as usual — see claude.md §3/§11).
+ *
+ * Discrepancy found 2026-08-25 while first building the "for-hovering" component
+ * against node 857:3078 (since corrected to node 858:3092, see claude.md §5):
+ * the raw Figma VARIABLE font/font family/accent is literally the string
+ * "Firo Mono" (not a real font), but the ACTUAL TEXT STYLE applied to the
+ * "See case"/"It's me" labels in that earlier build was "Fira Mono" (a real,
+ * common monospace font — per get_design_context's text style metadata).
+ * Almost certainly a typo in the Figma variable itself. Since "Firo Mono"
+ * doesn't exist as a font, using it verbatim would silently fall through to
+ * the generic monospace fallback — so --font-family-accent below lists
+ * "Fira Mono" first (what actually renders in the design) and keeps "Firo Mono"
+ * afterward for fidelity to the raw token value. Flag to the user/designer if
+ * the variable name gets fixed in Figma later.
+ *
+ * Not currently used: the for-hovering component was rebuilt 2026-08-25 against
+ * the correct reference (node 858:3092), which turned out to be a single flat
+ * image per variant, not live text — so these three tokens (font-family-accent,
+ * font-size-accent, font-weight-accent) have no current consumer. Left in place
+ * as valid, already-synced tokens for whenever a future component needs them.
+ */
+
+:root {
+  --font-family-text: "Helvetica Neue", Arial, sans-serif;
+  --font-family-accent: "Fira Mono", "Firo Mono", "Courier New", monospace; /* added 2026-08-25 — see discrepancy note above; not currently used by any component */
+
+  /* Sizes */
+  --font-size-h1: 80px;
+  --font-size-h2: 40px;
+  --font-size-h3: 24px;
+  --font-size-body: 20px;
+  --font-size-accent: 16px; /* added 2026-08-25 — not currently used by any component */
+
+  /* Weights (Figma "style" tokens) */
+  --font-weight-text: 300;   /* style/text: Light — used for body copy and header-nav-item */
+  --font-weight-h1: 300;     /* style/h1: Light */
+  --font-weight-h1-bold: 700; /* style/h1-b: Bold — bold variant of H1 */
+  --font-weight-h2: 500;     /* style/h2: Medium */
+  --font-weight-h3: 300;     /* Light — set manually per user instruction (2026-08-23), no matching Figma variable yet */
+  --font-weight-accent: 400; /* added 2026-08-25 — no style/accent Figma *variable* exists; not currently used by any component */
+}

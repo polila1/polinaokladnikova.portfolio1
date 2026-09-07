@@ -1,0 +1,9 @@
+/**
+ * Radius tokens (rounding)
+ * Source: Figma variables → design.tokens.json (mode: "design")
+ * Use for border-radius instead of raw px values.
+ */
+
+:root {
+  --radius-xl: 40px;
+}

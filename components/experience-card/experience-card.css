@@ -1,0 +1,296 @@
+/**
+ * Component: Experience card
+ * Figma source: node 822:1444 "experience card" — company + role + summary +
+ * achievement list + period, laid out in three columns.
+ *
+ * Requires /tokens/index.css AND /components/header-nav-item/header-nav-item.css
+ * (for .header-nav-item__label, reused for the company name typography) to be
+ * loaded on the page before this file.
+ *
+ * Not tokenized, taken directly from the Figma spec (component-local constants,
+ * see claude.md §5):
+ * - Column widths (380 / flexible / 140 — updated 2026-08-24, was 200 / flexible /
+ *   140) are expressed as flex-basis + a wrap fallback for narrow screens, not
+ *   fixed px, since no breakpoint/grid tokens exist yet.
+ * - .experience-card__logo is 40×40px (updated 2026-08-24, was 30×30px — matches
+ *   Figma "size-[40px]" now that real logo assets are in; no clip/border-radius,
+ *   since the source PNGs are already circular with their own fill color baked in).
+ * - .experience-card__details / __list gap is 3px in the Figma spec — NOT on the
+ *   /tokens/spacing.css scale (closest token is --space-xxs, 4px). Kept exact
+ *   pending confirmation with design; flagged in claude.md.
+ * - letter-spacing -0.5px on body-sized text is a fixed px value in Figma (like
+ *   project-card), not a percentage, so it isn't expressed as calc().
+ * - The bullet marker is a CSS-drawn triangle, NOT the real Figma SVG asset —
+ *   that asset could not be downloaded in this environment (see claude.md).
+ * - Logo image is per-entry content, not a global token — set it per instance
+ *   (see experience-card.html). Updated 2026-08-24: real logo PNGs supplied by
+ *   the user (images/foxford.png, podbor.png, itmo.png, freelance.png) replace
+ *   the earlier colored-circle-with-letter placeholder.
+ */
+
+.experience-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-m);
+  width: 100%;
+}
+
+/* ---------- column 1: brand ---------- */
+
+.experience-card__brand {
+  display: flex;
+  align-items: flex-end; /* updated 2026-08-25, was center — fresh get_design_context on node 815:393 shows items-end */
+  gap: var(--space-s);
+  flex: 0 0 380px; /* updated 2026-08-24, was 200px */
+  max-width: 380px;
+}
+
+.experience-card__logo {
+  flex: none;
+  width: 40px; /* updated 2026-08-24, was 30px — matches Figma size-[40px] */
+  height: 40px;
+  display: block;
+}
+
+.experience-card__logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.experience-card__brand-name {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-bottom: var(--space-xxs);
+  transition: background-color 200ms ease; /* added 2026-08-24, not from Figma — see claude.md §7 */
+  text-decoration: none; /* added 2026-08-25 — element became a real <a>, see note below */
+  color: inherit;
+  cursor: pointer;
+}
+/* text inside uses .header-nav-item__label from header-nav-item.css — same
+   Figma "header elment" instance, reused for typography only. Originally not
+   wrapped in .header-nav-item (not a link, so no hover) — updated 2026-08-24
+   per direct request: company names on the About page now highlight pink on
+   hover too, same --color-surface-link fill as the real nav links, applied
+   directly here instead of the .header-nav-item class.
+   Updated 2026-08-25: now a genuine link (was a plain hover highlight with no
+   href) — the markup element changed from <span> to <a href="…" target="_blank">
+   per direct user request, pointing each company name at its real site. Not
+   from Figma; the visual hover behavior itself is unchanged. */
+.experience-card__brand-name:hover {
+  background-color: var(--color-surface-link);
+}
+
+/* Added 2026-08-24 (about.html, node 815:393): header-nav-item__label is
+   nowrap + center by default (right for a single-word nav link), but longer
+   company names ("Podbor & Recrutach", "ITMO University") wrap to 2 lines and
+   left-align in the Figma spec — override both just inside this component. */
+.experience-card__brand-name .header-nav-item__label {
+  white-space: normal;
+  text-align: left;
+}
+
+/* ---------- column 2: role ---------- */
+
+.experience-card__role {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs); /* updated 2026-08-25, was --space-s (20px) — fresh get_design_context on node 815:393 shows gap-[indent/xxs,8px] between the role title and the details block */
+  flex: 1 1 400px;
+  min-width: 280px;
+}
+
+.experience-card__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-text);
+  font-size: var(--font-size-h3);
+  line-height: 1.1;
+  letter-spacing: 0; /* updated 2026-08-25, was calc(-2%) — Figma h3 style specifies letterSpacing: 0 */
+}
+
+.experience-card__details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  width: 100%;
+}
+
+.experience-card__summary {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-text);
+  font-size: var(--font-size-body);
+  line-height: 1.3;
+  letter-spacing: 0; /* updated 2026-08-25, was -0.5px — Figma body style specifies letterSpacing: 0 */
+}
+
+.experience-card__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.experience-card__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xs); /* updated 2026-08-25, was --space-s (20px) — fresh get_design_context on node 815:393 shows gap-[indent/xs,12px] between the bullet marker and the item text */
+  width: 100%;
+}
+
+.experience-card__marker {
+  flex: none;
+  width: 7px;
+  height: 18px; /* updated 2026-08-25, was 23px — fresh get_design_context on node 815:393 shows h-[18px] on this container */
+  display: flex;
+  align-items: center;
+}
+
+.experience-card__marker::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 6px solid var(--color-text-secondary);
+}
+
+.experience-card__item-text {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-text);
+  font-size: var(--font-size-body);
+  line-height: 1.3;
+  letter-spacing: 0; /* updated 2026-08-25, was -0.5px — Figma body style specifies letterSpacing: 0 */
+}
+
+/* ---------- column 3: period ---------- */
+
+.experience-card__period {
+  margin: 0;
+  flex: 0 0 140px;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-text);
+  font-size: var(--font-size-body);
+  line-height: 1.3;
+  letter-spacing: 0; /* updated 2026-08-25, was -0.5px — Figma body style specifies letterSpacing: 0 */
+}
+
+/* ---------- mobile layout (mode: mobile) ---------- */
+/* Added 2026-09-07 — Figma node 934:690/934:691, "experience card"
+ * property1: mobile. Below 640px the three columns (brand | role | period)
+ * reflow into two rows: brand + period side by side on top, role block
+ * full-width underneath. This is done purely with flex-wrap + order on the
+ * EXISTING flex children of .experience-card (already display:flex;
+ * flex-wrap:wrap up top) — no HTML/DOM reordering, matching this project's
+ * convention of handling all responsive behavior through media queries only
+ * (see claude.md §5).
+ *
+ * Sizes below come straight from the Figma "mobile" variable mode created
+ * this session (see claude.md §4, "Мобильная версия"): indent/xs=10,
+ * indent/xxs=6, font/size/h3=20, font/size/body=16. These are written as
+ * literal px, not var()s — the project has no separate mobile custom
+ * properties yet, same pattern already used for this component's
+ * non-tokenized constants (column widths, marker size, etc. — see the file
+ * header comment).
+ */
+@media (max-width: 640px) {
+  .experience-card {
+    gap: 10px; /* indent/xs (mobile), was var(--space-m)/40px on desktop — fixed 2026-09-07:
+                  re-checked node 934:690/934:691 in Figma, the mobile variant's root gap is
+                  indent/xs (10px), not desktop's indent/m (40px); the missing override left
+                  a much bigger gap between the brand+period row and the role block below,
+                  reported by direct request as "too much space between company name and
+                  responsibilities" */
+    align-items: center; /* row 1 (brand + period) is "items-center" in the Figma mobile
+                             node, was inherited flex-start from desktop; row 2 (.experience-card__role,
+                             forced onto its own full-width line below) is the only item on
+                             its line either way, so this has no effect there */
+  }
+
+  .experience-card__brand {
+    order: 1;
+    flex: 1 1 0; /* was 0 0 380px — brand shares row 1 with period; basis 0 so a long
+                    company name doesn't force the whole item onto its own line during
+                    the wrap calculation (flex-wrap sizes lines off the flex-basis, not
+                    the post-shrink width) */
+    min-width: 0; /* lets the brand box shrink narrower than its text's natural width,
+                     so the name wraps to 2 lines inside the box instead of overflowing */
+    max-width: none; /* was 380px */
+    gap: 10px; /* indent/xs (mobile), was var(--space-s) / 20px on desktop */
+  }
+
+  .experience-card__logo {
+    width: 35px; /* Figma mobile variant, was 40px on desktop */
+    height: 35px;
+  }
+
+  .experience-card__brand-name {
+    padding-bottom: 6px; /* indent/xxs (mobile), was var(--space-xxs) / 8px on desktop */
+  }
+
+  .experience-card__brand-name .header-nav-item__label {
+    font-size: 20px; /* font/size/h3 (mobile), was var(--font-size-h3) / 24px on desktop */
+  }
+
+  .experience-card__period {
+    order: 2; /* stays paired with .experience-card__brand on row 1 */
+    font-size: 16px; /* font/size/body (mobile), was var(--font-size-body) / 20px on desktop */
+
+    /* Fixed 2026-09-07, by direct request ("нужно чтобы дата была в одну
+       строку", reported on the ITMO and Foxford cards): this element inherited
+       the desktop column's fixed flex: 0 0 140px, which is too narrow for
+       longer ranges like "Oct 2023 – Dec 2023" / "Sept 2024 – June 2026" at
+       16px, so the browser wrapped the text onto a second line even with the
+       <br/> hidden below. Re-checked node 934:690/934:711 in Figma: the
+       mobile period box has no fixed width at all — it's sized to its content
+       (h-[23px], no w-[…]) and is explicitly whitespace-nowrap + text-right.
+       Switching to auto width + nowrap matches that and lets .experience-card__brand
+       (flex:1 1 0, min-width:0 — see above) give up exactly the space this needs. */
+    flex: 0 0 auto; /* was inherited 0 0 140px from desktop */
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  /* about.html adds a literal space before each <br/> inside
+     .experience-card__period ("June 2026 – <br/>present"); hiding the <br/>
+     here collapses the date range onto one line while keeping that space
+     as the visual separator ("June 2026 – present"). */
+  .experience-card__period br {
+    display: none;
+  }
+
+  .experience-card__role {
+    order: 3;
+    flex: 1 1 100%; /* forces this block onto its own row 2, full width */
+    gap: 6px; /* indent/xxs (mobile), was var(--space-xxs) / 8px on desktop */
+  }
+
+  .experience-card__title {
+    font-size: 20px; /* font/size/h3 (mobile), was var(--font-size-h3) / 24px on desktop */
+  }
+
+  .experience-card__summary,
+  .experience-card__item-text {
+    font-size: 16px; /* font/size/body (mobile), was var(--font-size-body) / 20px on desktop */
+  }
+
+  .experience-card__item {
+    gap: 10px; /* indent/xs (mobile), was var(--space-xs) / 12px on desktop */
+  }
+}

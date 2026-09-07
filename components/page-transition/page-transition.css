@@ -1,0 +1,59 @@
+/**
+ * Component: Page transition
+ * Not from Figma — there is no prototype/interaction defined between the
+ * "main screen" and "about screen" frames in the source file. Added
+ * 2026-09-08 by direct request ("сделай переход между страницами projects
+ * and about me в мобильной версии"): a plain cross-fade between index.html
+ * and about.html, mobile only. Chose "fade" directly with the user over a
+ * directional slide (see claude.md §5 for the discussion).
+ *
+ * Mechanism: the CSS View Transitions API's cross-document (MPA) mode —
+ * `@view-transition { navigation: auto; }` opts a same-origin document in;
+ * when BOTH the outgoing and incoming document have it, the browser
+ * snapshots the old page, swaps in the new one, and cross-fades the two
+ * root snapshots by default. No JavaScript, no SPA router — this project
+ * is (and stays) plain multi-page HTML.
+ *
+ * Progressive enhancement: per MDN, cross-document view transitions are
+ * still "Limited availability" (not Baseline) as of 2026 — a browser that
+ * doesn't support the feature simply ignores `@view-transition` and
+ * navigates normally, with no error and no missing content. Nothing here
+ * can break navigation on an unsupporting browser.
+ *
+ * Requires this file to be loaded on BOTH index.html and about.html —
+ * a transition only triggers if the descriptor is present on both ends of
+ * the navigation.
+ */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* `@view-transition` itself is a whole-document, top-level declaration —
+   it cannot be nested inside @media (it's not scoped per viewport by the
+   spec). So the mechanism is technically live at every width; to make the
+   visible effect mobile-only (as asked), the animation is collapsed to
+   effectively instant outside the mobile breakpoint, and given this
+   project's existing motion timing on desktop/tablet. 1ms (not `none`)
+   keeps the transition pseudo-elements' normal snapshot-swap behavior
+   intact — it just finishes imperceptibly fast. */
+@media (min-width: 641px) {
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 1ms !important;
+  }
+}
+
+/* 300ms ease matches this project's existing transition timing
+   (.project-card__media's hover scale, see project-card.css) rather than
+   the browser default of 250ms — picked for visual consistency with the
+   rest of the site's motion, not a Figma value. */
+@media (max-width: 640px) {
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 300ms;
+    animation-timing-function: ease;
+  }
+}

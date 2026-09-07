@@ -1,0 +1,54 @@
+/**
+ * Component: Header nav item
+ * Figma source: node 815:265 "Header Elment" — property `property1`, now officially
+ * three named variants: "default" | "hovering" | "active" (updated 2026-08-24;
+ * previously only "default"/"active" existed, and this file used "--active" for
+ * the pink pill and an invented "--current" modifier for the underline — both
+ * renamed/replaced below to match the real Figma variant names).
+ *
+ * Built strictly from design tokens in /tokens — no hardcoded hex or px values below.
+ *
+ * Requires /tokens/index.css to be loaded on the page before this file.
+ *
+ * Updated 2026-08-25: fresh get_design_context on the homepage (node 810:462) confirms
+ * the Figma h3 text style now specifies letterSpacing: 0 (was read as -2% earlier in the
+ * project) — the calc()-based -2% tracking below is removed.
+ */
+
+.header-nav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: var(--space-xxs);
+  border-bottom: 1px solid transparent; /* reserved so --active doesn't shift layout */
+  position: relative;
+  text-decoration: none;
+  transition: background-color 200ms ease; /* added 2026-08-24, not from Figma (no motion tokens yet) — softens the hover fill instead of an instant cut, see claude.md §7 */
+}
+
+.header-nav-item__label {
+  margin: 0;
+  display: block;
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-text);
+  font-size: var(--font-size-h3);
+  line-height: 1.1;
+  letter-spacing: 0; /* updated 2026-08-25, was calc(-2%) — Figma h3 style specifies letterSpacing: 0 */
+  color: var(--color-text-primary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* "hovering" — transient interaction feedback (real :hover, not a static class:
+   Figma variants are static states, but this one only ever happens on hover/press
+   on an actual site). Text stays --color-text-primary (white); only the background
+   changes. Independent of --active — hovering the current-page item still pinks. */
+.header-nav-item:hover {
+  background-color: var(--color-surface-link);
+}
+
+/* "active" — current-page indicator, distinct from hovering. A solid underline-style
+   border under the label, not a background fill. Pair with aria-current="page". */
+.header-nav-item--active {
+  border-bottom-color: var(--color-text-primary);
+}
