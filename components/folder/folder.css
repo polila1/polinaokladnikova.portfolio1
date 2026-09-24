@@ -1,0 +1,119 @@
+/**
+ * Component: Folder
+ * Figma source: node 939:951 "Folder" (fileKey RzqvgS1t3QHAGL0XP8CT3x), property1:
+ * "Default" (939:950) | "Variant2" (939:952) — a small decorative folder icon with
+ * three rotated word-tags ("mobile" / "web" / "media") that peek out slightly above
+ * it by default, and stick out further when the folder is hovered, as if the tags
+ * were being pulled up and out of the folder. Added 2026-09-23, by direct request
+ * ("добавь новый компонент в дизайн систему — папку. при наведении на нее из нее
+ * должны немного вылазить плашки со словами").
+ *
+ * ASSET LIMITATION (read before touching colors/back shape): in Figma this node is
+ * built from 4 raster/vector assets — a "Back" SVG (the folder silhouette/tab) and
+ * 3 PNGs, one per tag, with the word already baked into each image (rotated ribbon
+ * shape + text, exported as a single flattened image, not editable text). This
+ * session's network policy blocks fetching Figma's asset CDN (figma.com) from both
+ * this container and the linked Mac (confirmed via the agent proxy — 403 "blocked by
+ * allowlist" on www.figma.com), the same restriction previously hit while building
+ * the "for hovering" component (see for-hovering.css) — there it was resolved once
+ * the user supplied the images directly. Until the same happens here, this component
+ * is rebuilt with plain CSS instead of the original raster assets: a gradient
+ * rectangle + two highlight strips for the folder body/back, and 3 rotated text
+ * chips for the tags. Sizes, positions (px) and rotation angles below are copied
+ * exactly from Figma's get_design_context output for both variants — those are
+ * precise. The folder BACK shape (silhouette/tab behind the front) and the tag chip
+ * colors are NOT precisely known (the back is a flat SVG shape whose fill couldn't be
+ * read without downloading it; the tag PNGs' exact pink/text hex couldn't be
+ * pixel-sampled either) — approximated by eye from the get_screenshot preview and
+ * marked TBD below. Swap in the real exported PNG/SVG assets from Figma (drop them in
+ * /images and update this file) if/when available for pixel-perfect fidelity.
+ *
+ * Requires /tokens/index.css to be loaded on the page before this file.
+ */
+
+.folder {
+  position: relative;
+  width: 120px;
+  height: 100.851px;
+}
+
+/* "Back" — folder silhouette behind the front flap; also what gives the folder its
+   rounded top edge above the front, where the tags emerge from. TBD: exact color
+   unknown (see note above) — approximated as a slightly darker/desaturated blue
+   than the front gradient's own end color, by eye from the Figma screenshot. */
+.folder__back {
+  position: absolute;
+  inset: 0;
+  border-radius: 9.191px;
+  background: #359ddc;
+}
+
+/* Tag wrapper — position/size match the Figma "flex centering box" for each tag
+   exactly (not estimated); only the box moves on hover, see .folder:hover below.
+   transition added 2026-09-23, not from Figma (no motion spec on this node) — makes
+   the "tags sliding out" read as a hover gesture instead of an instant jump, same
+   reasoning as the 200ms hover fade already used on header-nav-item. */
+.folder__tag {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 220ms ease, top 220ms ease;
+  pointer-events: none;
+}
+
+.folder__tag--mobile { width: 85.91px;  height: 109.075px; left: -26.64px; top: -63.07px; }
+.folder__tag--web     { width: 55.989px; height: 86.598px;  left: 33px;     top: -49.07px; }
+.folder__tag--media    { width: 95.247px; height: 95.669px;  left: 56.99px;  top: -50.14px; }
+
+.folder:hover .folder__tag--mobile { left: -35.64px; top: -76.08px; }
+.folder:hover .folder__tag--web     { left: 33px;     top: -59.07px; }
+.folder:hover .folder__tag--media    { left: 59.99px;  top: -58.14px; }
+
+/* The actual pink chip + label, rotated inside its (unrotated) wrapper above —
+   size/rotation angle per tag copied exactly from Figma. TBD colors, see note at
+   the top of this file. */
+.folder__tag-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+  border-radius: 6px;
+  background: #ffd3ea;
+  color: #e34d95;
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-text);
+  font-size: 13px;
+  white-space: nowrap;
+  flex: none;
+}
+
+.folder__tag--mobile .folder__tag-label { width: 106.628px; transform: rotate(58.22deg); }
+.folder__tag--web     .folder__tag-label { width: 80px;      transform: rotate(-73.75deg); }
+.folder__tag--media    .folder__tag-label { width: 100px;     transform: rotate(-45.26deg); }
+
+/* "Front" — the folder's face. Painted after (on top of) the tags, same as in
+   Figma's layer order, so it clips the base of each tag and makes them look like
+   they're emerging from behind/inside the folder rather than floating over it. */
+.folder__front {
+  position: absolute;
+  left: 0;
+  top: 17.1px;
+  width: 120px;
+  height: 83.745px;
+  border-radius: 9.191px;
+  background: linear-gradient(260.6945deg, rgb(103, 204, 252) 0.68862%, rgb(64, 184, 244) 100%);
+}
+
+.folder__strip {
+  position: absolute;
+  left: 0;
+  width: 120px;
+  height: 2.298px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 -0.766px 0.766px 0 #a7deff, 0 0.766px 0.766px 0 #a7deff;
+  pointer-events: none;
+}
+
+.folder__strip:nth-of-type(1) { top: 83.34px; }
+.folder__strip:nth-of-type(2) { top: 88.06px; }

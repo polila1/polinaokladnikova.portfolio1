@@ -51,4 +51,18 @@
    border under the label, not a background fill. Pair with aria-current="page". */
 .header-nav-item--active {
   border-bottom-color: var(--color-text-primary);
+
+  /* Fixed 2026-09-23, by direct request ("сделай отступ от нижней части 4
+     пикселя а не 8, как было до"): fresh get_design_context on node 815:265
+     confirms the "active" variant sits on pb-[indent/xxxs,4px], a DIFFERENT
+     token from the "default" variant's indent/xxs — not just the same token
+     at a smaller value. This component previously (before this fix) used the
+     base class's padding-bottom: var(--space-xxs) unconditionally for every
+     state, which is where "как было до" (4px) comes from: indent/xxxs (4px)
+     is literally the old value of indent/xxs before the 2026-08-25 token
+     renumbering repointed indent/xxs to 8px and split off a new indent/xxxs
+     token holding the original 4px (see /tokens/spacing.css) — so this
+     variant's padding silently drifted from 4px to 8px in that renumbering,
+     unnoticed until now. */
+  padding-bottom: var(--space-xxxs);
 }

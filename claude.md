@@ -154,14 +154,16 @@ Figma-источник: node `815:265` ("Header Elment"), property `property1`, 
 Состояния:
 - **default** — текст `--color-text-primary` на прозрачном фоне, без обводки.
 - **hovering** (реальный `:hover`, без отдельного класса — в Figma это статичный вариант, но на живом сайте это состояние может быть только при наведении/нажатии) — фон `--color-surface-link`. Работает независимо от `--active`: наведение на текущий пункт меню тоже даёт розовый.
-- **active** (`.header-nav-item--active`, + `aria-current="page"`) — индикатор текущей страницы: сплошная белая линия под текстом (`border-bottom: 1px solid var(--color-text-primary)`), без заливки. Базовый `.header-nav-item` всегда резервирует прозрачный `border-bottom: 1px solid transparent`, чтобы включение `--active` не сдвигало соседние пункты меню по высоте.
+- **active** (`.header-nav-item--active`, + `aria-current="page"`) — индикатор текущей страницы: сплошная белая линия под текстом (`border-bottom: 1px solid var(--color-text-primary)`), без заливки, и уменьшенный отступ снизу — `padding-bottom: var(--space-xxxs)` (4px), а не стандартные 8px (см. отдельное примечание 2026-09-23 ниже). Базовый `.header-nav-item` всегда резервирует прозрачный `border-bottom: 1px solid transparent`, чтобы включение `--active` не сдвигало соседние пункты меню по высоте.
 
 Текст в любом состоянии остаётся `--color-text-primary` (белый).
 
 **История переименований (важно при чтении старых коммитов/скриншотов):** изначально в Figma было 2 варианта (default/active=розовый). 2026-08-23, разбирая реальную главную страницу (node 810:462), обнаружили, что текущая страница показана подчёркиванием, а не розовым — завели свой класс `.header-nav-item--current` с `text-decoration: underline`. 2026-08-24 в Figma появилось официальное 3-е состояние `active` с точным описанием (`border-bottom`, не `text-decoration`) — `.header-nav-item--current` переименован обратно в `.header-nav-item--active` (теперь означает current-page, а не розовую заливку), а розовая заливка осталась только на `:hover`, без статичного класса-алиаса.
 
+**Исправление отступа active-состояния (2026-09-23), по прямому запросу («обнови этот компонент при выделении, сделай отступ от нижней части 4 пикселя а не 8, как было до»):** свежий `get_design_context` на узле 815:265 подтвердил, что вариант `active` в Figma сидит на `pb-[indent/xxxs,4px]` — это ДРУГОЙ токен, а не просто уменьшенное значение того же `indent/xxs`. До этой правки `.header-nav-item--active` не переопределял `padding-bottom` и наследовал `var(--space-xxs)` от базового `.header-nav-item` — то есть 8px. Отсюда и фраза «как было до»: `--space-xxxs` (4px) — это буквально старое значение `--space-xxxs`/`indent/xxs` до переименования шкалы токенов 2026-08-25 (см. `/tokens/spacing.css`), когда `indent/xxs` поменял значение с 4px на 8px, а старое значение 4px переехало в новый токен `indent/xxxs`. Так как компонент ссылался на токен по имени (`--space-xxs`), а не по значению, при переименовании шкалы отступ активного пункта меню незаметно съехал с 4px на 8px — это и есть первопричина бага. Исправлено добавлением `padding-bottom: var(--space-xxxs)` в `.header-nav-item--active` (файл `/components/header-nav-item/header-nav-item.css`), применено сразу на обеих страницах (`index.html`, `about.html` — оба используют общий CSS-файл компонента, инлайн-переопределений `.header-nav-item--active` в самих страницах нет) и во всех трёх опубликованных Cowork-артефактах (Home, About, Design System — включая копию `.live-nav-item--active` в демо-секции «Компоненты» дизайн-системы). **Не тронуто намеренно:** Figma-спека для варианта `hovering` тоже показывает `pb-[indent/xxxs,4px]`, то есть должна отличаться от `default` тем же образом — но пользователь попросил исправить только состояние «при выделении» (active), поэтому `hovering` по-прежнему наследует 8px от базового класса. Если это тоже нужно поправить — требуется отдельный запрос.
+
 Токены, из которых собран компонент — ничего не хардкожено сверх них:
-- `--font-family-text`, `--font-weight-text`, `--font-size-h3`, `--color-text-primary`, `--color-surface-link`, `--space-xxs` (padding-bottom).
+- `--font-family-text`, `--font-weight-text`, `--font-size-h3`, `--color-text-primary`, `--color-surface-link`, `--space-xxs` (padding-bottom, состояния default/hovering), `--space-xxxs` (padding-bottom, состояние active — см. примечание 2026-09-23 выше).
 
 Примечание: компонент использует `--font-weight-text`, а не `--font-weight-h3`, потому что в самой Figma-ноде текст буквально привязан к переменной `style/text`, а не `style/h3` — сейчас оба токена равны 300 (Light), так что визуально разницы нет.
 
@@ -208,14 +210,11 @@ Figma-источник: node `822:1387` ("footer") — строка из трё�
 
 Подключать вместе с `/components/header-nav-item/header-nav-item.css`.
 
-Разметка:
+Разметка (актуальная, на реальных страницах):
 ```html
 <nav class="footer">
   <a class="header-nav-item" href="mailto:okladniikova.pe@gmail.com">
     <span class="header-nav-item__label">Email</span>
-  </a>
-  <a class="header-nav-item" href="https://www.linkedin.com/in/polina-okladnikova-650309394/" target="_blank" rel="noopener noreferrer">
-    <span class="header-nav-item__label">LinkedIn</span>
   </a>
   <a class="header-nav-item" href="#cv">
     <span class="header-nav-item__label">CV</span>
@@ -223,7 +222,9 @@ Figma-источник: node `822:1387` ("footer") — строка из трё�
 </nav>
 ```
 
-Примечание: `href="#cv"` пока заглушка — файл CV нужно подставить при наполнении контентом (см. раздел 9 «Контент», пока TBD). LinkedIn — обновлено 2026-08-24: заглушка `#linkedin` заменена на настоящий профиль пользователя, `https://www.linkedin.com/in/polina-okladnikova-650309394/`, везде на сайте (Header и Footer на `index.html` и `about.html`, а также в сниппетах `/components/header/header.html` и `.demo.html`) — ссылка открывается в новой вкладке (`target="_blank" rel="noopener noreferrer"`). Email — обновлено 2026-08-25: заглушка `#email` заменена на `mailto:okladniikova.pe@gmail.com`, везде на сайте (Footer на `index.html` и `about.html`), по прямому запросу пользователя.
+Примечание: `href="#cv"` пока заглушка — файл CV нужно подставить при наполнении контентом (см. раздел 9 «Контент», пока TBD). Email — обновлено 2026-08-25: заглушка `#email` заменена на `mailto:okladniikova.pe@gmail.com`, везде на сайте (Footer на `index.html` и `about.html`), по прямому запросу пользователя.
+
+**LinkedIn убран из Footer, 2026-09-23, по прямому запросу («внизу на каждой странице убери linked in, оставь только email, cv»).** До этого момента ссылка была настоящим профилем пользователя (обновлено 2026-08-24, заглушка `#linkedin` → `https://www.linkedin.com/in/polina-okladnikova-650309394/`, открывалась в новой вкладке). Убрана строго из Footer на `index.html` и `about.html`, а также из `/components/footer/footer.html` и `.demo.html` (чтобы сниппет/превью компонента не расходились с реальным использованием). **LinkedIn в Header (верхняя навигация «Projects / About me / LinkedIn») не тронут** — запрос был именно про блок внизу страницы (Footer), а не про верхнюю навигацию; в Header (десктоп и мобильное выпадающее меню) ссылка на LinkedIn остаётся как была. Figma-нода `822:1387` по-прежнему специфицирует 3 пункта (Email/LinkedIn/CV) — это осознанное расхождение с макетом по прямому запросу пользователя, не забытая правка.
 
 Мобильный размер текста ссылок — добавлено 2026-09-07, по прямому запросу («ссылки email linkedin and CV должны быть размером body mobile, то есть 16»): внутри `@media (max-width: 640px)` на `index.html` и `about.html` добавлено правило `.footer .header-nav-item__label { font-size: 16px; }` (font/size/body, mobile) — переопределяет размер по умолчанию у `.header-nav-item__label` (h3: 24px десктоп / 20px мобайл). Правило намеренно ограничено селектором `.footer`, тем же способом, что и переопределение в `experience-card.css` для `.experience-card__brand-name` — чтобы не затронуть Header и мобильное выпадающее меню (`.mobile-nav`), которые тоже используют `.header-nav-item__label`, но должны сохранить свой текущий размер.
 
@@ -360,6 +361,36 @@ Figma-источник: node `858:3092` ("Hovering", вариант `property1: 
 
 Проверено Playwright (Chromium 141, поддерживает cross-document view transitions) на мобильном вьюпорте (390×844): открыт `index.html` через локальный HTTP-сервер (не `file://` — у `file://`-документов каждый URL получает свой непрозрачный origin, и API переходов между документами не сработал бы), через мобильное меню (гамбургер → дропдаун) кликнута ссылка «About me»; событие `pageswap` на уходящей странице и `pagereveal` на входящей оба репортировали `viewTransition` как реально существующий объект (не `null`), то есть переход браузером фактически запущен в обе стороны навигации.
 
+### Folder
+
+Figma-источник: node `939:951` "Folder" (fileKey `RzqvgS1t3QHAGL0XP8CT3x`), property1: `Default` (939:950) | `Variant2` (939:952) — маленькая декоративная иконка папки, из которой торчат три розовые плашки-ленты со словами «mobile» / «web» / «media». В варианте `Default` плашки видны совсем немного, в `Variant2` — сильнее выдвинуты вверх и в стороны. Добавлено 2026-09-23 по прямому запросу («добавь новый компонент в дизайн систему — папку. при наведении на нее из нее должны немного вылазить плашки со словами»).
+
+Файлы: `/components/folder/folder.css`, `.html` (сниппет использования), `.demo.html` (превью на фоне `--color-surface-background`, два состояния — второе интерактивно, наведи курсор).
+
+Разметка:
+```html
+<div class="folder">
+  <div class="folder__back"></div>
+  <div class="folder__tag folder__tag--mobile"><span class="folder__tag-label">mobile</span></div>
+  <div class="folder__tag folder__tag--web"><span class="folder__tag-label">web</span></div>
+  <div class="folder__tag folder__tag--media"><span class="folder__tag-label">media</span></div>
+  <div class="folder__front">
+    <div class="folder__strip"></div>
+    <div class="folder__strip"></div>
+  </div>
+</div>
+```
+
+Состояния: **default** — плашки чуть видны над папкой; **hovering** (реальный `:hover` на `.folder`, без отдельного класса, как и в header-nav-item) — все три плашки одновременно сдвигаются выше и немного в стороны (`left`/`top` каждой плашки анимируются с `transition: 220ms ease`, не из Figma — тайминг подобран по аналогии с уже существующей 200мс-анимацией hover в header-nav-item, см. §7). Порядок слоёв (back → плашки → front → strips) взят из порядка слоёв в самой Figma-ноде и важен: `front` рисуется поверх плашек и «срезает» их нижнюю часть, отчего кажется, что они высовываются именно из-за створки папки, а не просто лежат сверху.
+
+**Ограничение по ассетам (важно при правке).** В Figma этот узел собран из 4 картинок: SVG «Back» (силуэт/язычок папки) и 3 PNG — по одному на плашку, где текст уже впечатан в саму растровую картинку (не отдельный текстовый слой). В этой сессии сеть заблокировала обращения к CDN Figma (`figma.com`) — и из контейнера, и с компьютера через мост (`403 blocked-by-allowlist` на прокси в обоих местах) — то же самое ограничение, что уже встречалось при сборке компонента `for-hovering` (см. его файл `for-hovering.css`), где оно снялось только после того, как пользователь сам прислал картинки. Пока этого не произошло и здесь, компонент собран заново на чистом CSS вместо оригинальных картинок:
+- Позиции, размеры (px) и углы поворота каждой плашки — точные, взяты прямо из ответа `get_design_context` для обоих вариантов (`Default`/`Variant2`), не на глаз.
+- Цвет «Back» (силуэта папки) и точные цвета/текстовый цвет внутри плашек — TBD, подобраны на глаз по превью `get_screenshot` (доступному только как удалённый рендер, без возможности попиксельно определить hex). Если позже появятся настоящие экспортированные PNG/SVG из Figma — их нужно положить в `/images` и подключить в `folder.css` вместо текущей CSS-реализации для точного совпадения.
+
+Токены: `--font-family-text`, `--font-weight-text` (текст плашек — используется базовый текстовый стиль сайта, т.к. у самого узла в Figma нет отдельного стиля текста, который можно было бы прочитать без скачивания ассетов). Остальные величины (цвета папки/плашек, радиусы, толщины полосок-«strip») не токенизированы — они либо приблизительные (см. ограничение выше), либо, как у `for-hovering`, являются локальными константами конкретной декоративной иллюстрации, а не переиспользуемыми значениями дизайн-системы.
+
+**Не применено к реальным экранам.** Запрос был именно про добавление компонента в дизайн-систему — `index.html`/`about.html` не тронуты. На главной странице уже есть отдельная статичная картинка-папка (`images/Folder.png`, `.hero__folder`, см. §8 «Главная») — это готовый плоский PNG всей иллюстрации целиком, не связанный с этим новым интерактивным компонентом. Если понадобится заменить декоративную папку в hero на этот интерактивный CSS-вариант (или наоборот) — нужен отдельный запрос.
+
 ## 6. Иконки и иллюстрации
 _(стиль, источник, размеры — TBD)_
 
@@ -386,7 +417,7 @@ Figma-источник: node `810:462` ("main screen web"). Файл: `/index.ht
    - `.header` (композиция header-nav-item) — «Projects» с модификатором `--active` (это текущая страница, белая линия под текстом, `href="index.html"`), «About me» → `about.html`, «LinkedIn» → реальный профиль (обновлено 2026-08-24, было `#linkedin`; см. §5 Footer).
    - `.hero` — см. ниже.
 2. `.home__content` (max-width **1200px**, обновлено 2026-08-24 — было 1100px, взятое с фрейма отдельного компонента project-card; на самой странице Figma инстанс растянут до 1200px, как и header/hero) с `.project-card`: реальный контент из Figma — «The university ecosystem», март–июль 2026, картинка `images/case image 1.png` (с 2026-08-24 — скруглёнными углами `--radius-xl`, см. §5 Project card).
-3. `.home__content` с `.footer` (Email / LinkedIn / CV; Email и LinkedIn — реальные ссылки, `href="#cv"` пока заглушка, см. §5 Footer).
+3. `.home__content` с `.footer` (Email / CV, обновлено 2026-09-23 — LinkedIn убран, см. §5 Footer; Email — реальная ссылка, `href="#cv"` пока заглушка).
 
 Между всеми тремя блоками — `gap: var(--space-xl)` на `.home`, плюс `padding: var(--space-m) var(--space-xxl) var(--space-l)` (сверху/по бокам/снизу) — как в самой Figma-ноде. Боковой паддинг обновлён 2026-08-24: было `--space-xl` (120px), стало `--space-xxl` (360px, см. §4) — тот же токен, что и на странице About me. Как и там, это рассчитано на очень широкий Figma-канвас, поэтому на обычных ширинах браузера сужается через медиа-запросы (см. ниже), иначе `.home__content` (max-width 1200px) физически не помещается уже на ~1500px viewport.
 
@@ -422,8 +453,9 @@ Figma-источник: node `815:393` ("about screen"). Файл: `/about.html`
 1. `.header` (композиция header-nav-item) — «Projects» → `index.html`, «About me» с модификатором `--active` (текущая страница, `href="about.html"`, `aria-current="page"`), «LinkedIn» → реальный профиль (обновлено 2026-08-24, было `#linkedin`; см. §5 Footer).
 2. `.about__content` (max-width 1200px, тот же принцип, что и `.home__content` на главной):
    - `.about__intro` — фото + заголовок «Who I am» + био, **в ряд** (обновлено 2026-08-24 — было в колонку, фото сверху на всю ширину). Фото `.about__photo` — `images/photo big.png`, 380×456 (обновлено 2026-08-25, было 380×448 — свежий `get_design_context` показал `h-[456px]` у этого узла), скруглено `--radius-xl` (совпадает с токеном ровно, в отличие от `.hero__photo` на главной), `flex: none`. Текстовый блок `.about__text` — `flex: 1 1 0`, занимает всё оставшееся место справа от фото: заголовок «Who I am» (обновлено 2026-08-24, было «Hello!»; h1, **Bold**, белый, тот же -3%-трекинг, что и на главной) + био в 4 абзацах (`--font-size-body`, `--color-text-primary` — белый, не серый, как в самой Figma-спеке; `letter-spacing: 0`, обновлено 2026-08-25, было `-0.5px` — Figma body style; между абзацами `margin-bottom: var(--space-xs)` (12px, обновлено 2026-08-25, было `--space-s`/20px — Figma задаёт этот отступ как нетокенизированный фиксированный `mb-[12px]`, не через переменную, а после перенумерации шкалы 12px совпадает с `--space-xs`, не с `--space-s`), у последнего абзаца — 0).
-   - `.about__experience` — 5 карточек `.experience-card` (переиспользованы как есть, см. §5 — колонка «бренд» там же расширена до 380px 2026-08-24): Foxford × 2 (Product Designer, затем более ранняя роль Communication Designer), Podbor & Recrutach, ITMO University, Freelance. Контент и цифры — как в Figma-спеке узла. Название компании у Foxford/Podbor & Recrutach/ITMO University — ссылка на реальный сайт компании (обновлено 2026-08-25, см. §5 Experience card); у Freelance ссылки нет.
-   - `.footer` — Email и LinkedIn реальные ссылки, `href="#cv"` пока заглушка, см. §5 Footer.
+   - `.about__experience` — 4 карточки `.experience-card` (переиспользованы как есть, см. §5 — колонка «бренд» там же расширена до 380px 2026-08-24): Foxford (Communication Designer), Podbor & Recrutach (Communication Designer), ITMO University, Freelance. Контент и цифры — как в Figma-спеке узла. Название компании у Foxford/Podbor & Recrutach/ITMO University — ссылка на реальный сайт компании (обновлено 2026-08-25, см. §5 Experience card); у Freelance ссылки нет.
+     **Изменено 2026-09-23, по прямому запросу («убери со второй страницы блок Product Designer в Фоксфорде и поменяй местами Communication Designer в Подборе и Communication Designer в Фоксфорде»):** было 5 карточек в порядке Foxford — Product Designer (June 2026 – present) → Podbor & Recrutach — Communication Designer (Aug 2024 – present) → Foxford — Communication Designer (Sept 2024 – June 2026) → ITMO University → Freelance. Карточка «Foxford — Product Designer» удалена целиком; оставшиеся две карточки Communication Designer поменяны местами — теперь первой идёт Foxford (Sept 2024 – June 2026), второй Podbor & Recrutach (Aug 2024 – present). Итоговый порядок: Foxford (Communication Designer) → Podbor & Recrutach (Communication Designer) → ITMO University → Freelance. Ни один другой блок (боковая колонка логотипов, текст био, футер) не тронут.
+   - `.footer` — Email / CV, обновлено 2026-09-23 — LinkedIn убран, см. §5 Footer; Email реальная ссылка, `href="#cv"` пока заглушка.
 
 Между `.header` и `.about__content` — `gap: var(--space-xl)` (100px, обновлено 2026-08-25, было `--space-l`/80px — токен, на который указывает Figma-нода `815:393` (`indent/xl` на верхнем уровне), сдвинулся по новой шкале, сам шаг отступа в Figma не менялся). Между `.about__intro` и `.about__experience` внутри `.about__content` — `gap: var(--space-xxl)` (120px, обновлено 2026-08-25, было `--space-xl`/100px — та же логика: `822:424` в Figma ссылается на `indent/xxl`, который после перенумерации 2026-08-25 стал 120px). Паддинг: `padding: var(--space-m) var(--space-xxl) var(--space-l)` — боковой паддинг обновлён 2026-08-24 с `--space-xl` на токен `--space-xxl` (было 120px, после перенумерации 2026-08-25 стало 120px тоже — см. §4, значение `--space-xxl` сменилось с 360px на 120px); это по-прежнему сужается через медиа-запросы на обычных ширинах браузера (см. ниже, брейкпоинт `@media (max-width:1600px)` теперь избыточен по той же причине, что и на главной, см. §4, но оставлен как есть).
 
