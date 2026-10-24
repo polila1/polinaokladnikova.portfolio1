@@ -1,0 +1,15 @@
+<!--
+  Usage snippet: Language toggle
+  Place as the last item inside a .header or .mobile-nav <nav> (after the
+  LinkedIn link). Requires /i18n.js on the page: it reads data-lang-switch
+  on click, re-renders every [data-i18n] element on the page in that
+  language, and keeps aria-pressed in sync on every .language-toggle
+  instance (there are normally two per page — one in the desktop header,
+  one in the mobile dropdown).
+-->
+
+<div class="language-toggle" role="group" aria-label="Language / Язык">
+  <button type="button" class="language-toggle__option" data-lang-switch="ru" aria-pressed="true">RU</button>
+  <span class="language-toggle__divider" aria-hidden="true">/</span>
+  <button type="button" class="language-toggle__option" data-lang-switch="en" aria-pressed="false">EN</button>
+</div>

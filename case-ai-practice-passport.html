@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title data-i18n="meta.title.case-aipp">AI Practice Passport — кейс, Полина Окладникова</title>
+<link rel="stylesheet" href="tokens/index.css" />
+<link rel="stylesheet" href="components/header-nav-item/header-nav-item.css" />
+<link rel="stylesheet" href="components/page-transition/page-transition.css" />
+<link rel="stylesheet" href="components/language-toggle/language-toggle.css" />
+<style>
+  /**
+   * Case page: AI Practice Passport — Figma source: node 1025:779
+   * "case: AI Practice Passport", the final (user-edited) version of a
+   * frame built earlier the same day. Added 2026-10-23, by direct request
+   * ("теперь перенеси эту страницу. она должна открываться при нажатии на
+   * see case - AI Passport"): links from the AI Practice Passport project
+   * card on index.html (see claude.md §11/§12).
+   *
+   * Every spacing/color/radius/type value below is bound to a real design
+   * token, confirmed one card at a time via get_design_context against the
+   * live frame (not estimated from the screenshot) — this was a direct
+   * follow-up to "все занеси в стили, цвета, тексты, отступы, скругления"
+   * on the Figma draft, now carried through into the real CSS.
+   *
+   * --radius-l (new token, rounding/l = 20px) is used here for every card
+   * border-radius — see tokens/radius.css for where it came from.
+   *
+   * Grids (stats / flow / measure) are built as equal-width CSS grids
+   * rather than copying each card's individual Figma width — the Figma
+   * frame is a fixed 1920px canvas where cards hug their own text content,
+   * but this site is fluid/responsive, so equal columns both match the
+   * overall visual rhythm in the screenshot and reflow correctly at
+   * narrower widths (not a literal 1:1 port of each card's absolute px
+   * width).
+   *
+   * No header/footer chrome, no mobile hamburger menu: the Figma frame
+   * itself only has a "← Projects" back link — Polina removed the eyebrow/
+   * status-badge/meta-row and every other section down to this minimal
+   * version by hand (see claude.md §11). The language toggle is added next
+   * to the back link (not in the Figma frame, same as index.html/about.html
+   * — "не из Figma", added purely so RU/EN switching still works here,
+   * per "Сделать двуязычной (рекомендую)").
+   */
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--color-surface-background);
+  }
+
+  body {
+    font-family: var(--font-family-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-surface-link);
+    outline-offset: 3px;
+  }
+
+  .case {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-xl) var(--space-xxl);
+  }
+
+  .case__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xl); /* matches every top-level gap measured on the Figma frame — back link→title, and between every section, are all exactly indent/xl (100px) */
+    width: 100%;
+    max-width: 1680px; /* Figma frame content width (1920 − 2×120 side padding) */
+  }
+
+  .case__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    width: 100%;
+  }
+
+  /* ---------- title ---------- */
+
+  .case__title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xxs);
+  }
+
+  .case__heading {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-h1-bold);
+    font-size: clamp(2.5rem, 6vw, var(--font-size-h1));
+    line-height: 1.1;
+    letter-spacing: calc(var(--font-size-h1) * -0.03); /* -3%, matches the Figma "h1 bold" text style, same as about__heading */
+    color: var(--color-text-primary);
+  }
+
+  .case__subtitle {
+    margin: 0;
+    max-width: 780px;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-h3);
+    font-size: var(--font-size-h3);
+    line-height: 1.1;
+    color: var(--color-text-primary);
+  }
+
+  /* ---------- shared section scaffolding ---------- */
+
+  .case__section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-m); /* heading block → content, measured as indent/m on every section */
+    width: 100%;
+  }
+
+  .case__section-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xxs);
+    width: 100%;
+  }
+
+  .case__section-heading {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-h2);
+    font-size: var(--font-size-h2);
+    line-height: 1.1;
+    color: var(--color-text-primary);
+  }
+
+  .case__section-intro {
+    margin: 0;
+    max-width: 780px;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-text);
+    font-size: var(--font-size-body);
+    line-height: 1.3;
+    color: var(--color-text-secondary);
+  }
+
+  /* Shared card shell — stat tiles, flow steps and measure tiles all use
+     the exact same border / radius / padding / inner gap (confirmed
+     identical across all three via get_design_context). */
+  .case__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xxs);
+    padding: var(--space-m);
+    border: 1px solid rgba(255, 255, 255, 0.14); /* matches the border already used by .mobile-nav, no token for this yet */
+    border-radius: var(--radius-l);
+    width: 100%;
+  }
+
+  /* ---------- problem: stats + assumption ---------- */
+
+  .case__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xs);
+    width: 100%;
+  }
+
+  .case__stat-value {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-h2);
+    font-size: var(--font-size-h2);
+    line-height: 1.1;
+    color: var(--color-surface-link);
+  }
+
+  .case__stat-label {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-text);
+    font-size: var(--font-size-body);
+    line-height: 1.3;
+    color: var(--color-text-secondary);
+  }
+
+  .case__callout {
+    width: 100%;
+    padding: var(--space-s) var(--space-m);
+    border-left: 3px solid var(--color-surface-link);
+  }
+
+  .case__callout p {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-text);
+    font-size: var(--font-size-body);
+    line-height: 1.3;
+    color: var(--color-text-primary);
+  }
+
+  /* ---------- who is involved ---------- */
+
+  .case__table {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+    width: 100%;
+  }
+
+  .case__table-row {
+    display: grid;
+    grid-template-columns: minmax(200px, 380px) 1fr;
+    gap: var(--space-m);
+    align-items: start;
+    width: 100%;
+    padding: var(--space-xs) 0 var(--space-s);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .case__table-role {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-text);
+    font-size: var(--font-size-body);
+    line-height: 1.3;
+    color: var(--color-text-primary);
+  }
+
+  .case__table-desc {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-text);
+    font-size: var(--font-size-body);
+    line-height: 1.3;
+    color: var(--color-text-secondary);
+  }
+
+  /* ---------- the flow ---------- */
+
+  .case__flow-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xs);
+    width: 100%;
+  }
+
+  .case__flow-step-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xxs);
+  }
+
+  .case__step-number {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--color-surface-link);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-accent);
+    font-weight: var(--font-weight-accent);
+    font-size: var(--font-size-accent);
+    line-height: 1.1;
+  }
+
+  .case__step-title {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-text);
+    font-size: var(--font-size-h3);
+    line-height: 1.1;
+    color: var(--color-text-primary);
+  }
+
+  .case__step-desc {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-text);
+    font-size: var(--font-size-body);
+    line-height: 1.3;
+    color: var(--color-text-secondary);
+  }
+
+  /* ---------- what I would measure ---------- */
+
+  .case__measure-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xs);
+    width: 100%;
+  }
+
+  .case__measure-label {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-text);
+    font-size: var(--font-size-body);
+    line-height: 1.3;
+    color: var(--color-surface-link);
+  }
+
+  .case__measure-desc {
+    margin: 0;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-text);
+    font-size: var(--font-size-body);
+    line-height: 1.3;
+    color: var(--color-text-secondary);
+  }
+
+  /* ---------- responsive ---------- */
+
+  @media (max-width: 1600px) {
+    .case { padding-left: var(--space-xl); padding-right: var(--space-xl); }
+  }
+  @media (max-width: 900px) {
+    .case { padding-left: var(--space-m); padding-right: var(--space-m); }
+    .case__flow-grid { grid-template-columns: repeat(2, 1fr); }
+    .case__stats { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .case {
+      padding: var(--space-l) var(--space-m); /* 80px/40px — matches the indent/l + indent/m mobile pair already used on about.html */
+    }
+    .case__content {
+      gap: 40px; /* indent/l (mobile) */
+    }
+    .case__section {
+      gap: 24px; /* indent/m (mobile) */
+    }
+    .case__heading {
+      font-weight: var(--font-weight-h2); /* mobile heading uses the h2 style, not h1-bold — same override as about__heading */
+      font-size: 32px; /* font/size/h2 (mobile) */
+      letter-spacing: 0;
+    }
+    .case__subtitle {
+      font-size: 16px; /* font/size/body (mobile) */
+      max-width: 100%;
+    }
+    .case__section-heading {
+      font-size: 20px; /* font/size/h3 (mobile) */
+    }
+    .case__section-intro,
+    .case__stat-label,
+    .case__callout p,
+    .case__table-role,
+    .case__table-desc,
+    .case__step-desc,
+    .case__measure-desc {
+      font-size: 16px; /* font/size/body (mobile) */
+    }
+    .case__step-title {
+      font-size: 20px; /* font/size/h3 (mobile) */
+    }
+    .case__stat-value {
+      font-size: 32px; /* font/size/h2 (mobile) */
+    }
+    .case__card {
+      padding: var(--space-s);
+    }
+    .case__table-row,
+    .case__flow-grid,
+    .case__measure-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+<!-- Contentsquare (ex-Hotjar) analytics tag — see claude.md §10 -->
+<script src="https://t.contentsquare.net/uxa/0a1e43774b1bd.js" defer></script>
+</head>
+<body>
+  <div class="case">
+    <div class="case__content">
+      <div class="case__topbar">
+        <a class="header-nav-item" href="index.html">
+          <span class="header-nav-item__label" data-i18n="case.aipp.back">← Проекты</span>
+        </a>
+        <div class="language-toggle" role="group" aria-label="Language / Язык">
+          <button type="button" class="language-toggle__option" data-lang-switch="ru" aria-pressed="true">RU</button>
+          <span class="language-toggle__divider" aria-hidden="true">/</span>
+          <button type="button" class="language-toggle__option" data-lang-switch="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+
+      <div class="case__title">
+        <h1 class="case__heading" data-i18n="case.aipp.h1">Паспорт AI-практики</h1>
+        <p class="case__subtitle" data-i18n="case.aipp.subtitle">Тренажёр, который помогает сотрудникам применить правила ИИ компании к реальной рабочей задаче — ещё до того, как они сделают её по-настоящему</p>
+      </div>
+
+      <section class="case__section">
+        <div class="case__section-head">
+          <h2 class="case__section-heading" data-i18n="case.aipp.problem.heading">Проблема</h2>
+          <p class="case__section-intro" data-i18n="case.aipp.problem.intro">Компании дают сотрудникам AI-инструмент, политику использования и общий курс. Но люди всё равно не понимают: можно ли применить ИИ для этой задачи, с этими данными?</p>
+        </div>
+        <div class="case__stats">
+          <div class="case__card">
+            <p class="case__stat-value">85%</p>
+            <p class="case__stat-label" data-i18n="case.aipp.stat1.label">сотрудников говорят, что обучение не помогает им применять ИИ в своей работе</p>
+          </div>
+          <div class="case__card">
+            <p class="case__stat-value">32%</p>
+            <p class="case__stat-label" data-i18n="case.aipp.stat2.label">вводили клиентские данные в AI-инструменты, не проверив их</p>
+          </div>
+        </div>
+        <div class="case__callout">
+          <p data-i18n="case.aipp.assumption">Моё предположение: после общего курса сотрудник всё ещё не уверен, как применить правила к своей конкретной задаче</p>
+        </div>
+      </section>
+
+      <section class="case__section">
+        <h2 class="case__section-heading" data-i18n="case.aipp.who.heading">Кто участвует</h2>
+        <div class="case__table">
+          <div class="case__table-row">
+            <p class="case__table-role" data-i18n="case.aipp.who.role1">Сотрудник</p>
+            <p class="case__table-desc" data-i18n="case.aipp.who.desc1">Тренируется на вымышленном тикете и получает чёткую инструкцию для реальной задачи</p>
+          </div>
+          <div class="case__table-row">
+            <p class="case__table-role" data-i18n="case.aipp.who.role2">L&amp;D / AI Enablement (владелец и заказчик)</p>
+            <p class="case__table-desc" data-i18n="case.aipp.who.desc2">Собирает упражнения внутри правила и видит сводки по группе</p>
+          </div>
+          <div class="case__table-row">
+            <p class="case__table-role" data-i18n="case.aipp.who.role3">Security / Legal / AI Governance (владелец правила)</p>
+            <p class="case__table-desc" data-i18n="case.aipp.who.desc3">Публикует правило один раз: разрешённый инструмент, запрещённые данные, что нужно проверить</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="case__section">
+        <h2 class="case__section-heading" data-i18n="case.aipp.flow.heading">Как это работает</h2>
+        <div class="case__flow-grid">
+          <div class="case__card">
+            <div class="case__flow-step-head">
+              <span class="case__step-number" aria-hidden="true">1</span>
+              <p class="case__step-title" data-i18n="case.aipp.flow.step1.title">Вход</p>
+            </div>
+            <p class="case__step-desc" data-i18n="case.aipp.flow.step1.desc">Закреплённая ссылка в канале поддержки открывает карточку задачи</p>
+          </div>
+          <div class="case__card">
+            <div class="case__flow-step-head">
+              <span class="case__step-number" aria-hidden="true">2</span>
+              <p class="case__step-title" data-i18n="case.aipp.flow.step2.title">Карточка задачи</p>
+            </div>
+            <p class="case__step-desc" data-i18n="case.aipp.flow.step2.desc">Показывает разрешённый инструмент, что нужно убрать и что проверить</p>
+          </div>
+          <div class="case__card">
+            <div class="case__flow-step-head">
+              <span class="case__step-number" aria-hidden="true">3</span>
+              <p class="case__step-title" data-i18n="case.aipp.flow.step3.title">Упражнение</p>
+            </div>
+            <p class="case__step-desc" data-i18n="case.aipp.flow.step3.desc">Короткое упражнение на вымышленном тикете: отметить данные, которые нельзя передавать в ИИ, выбрать разрешённый инструмент, выбрать, что проверить в результате</p>
+          </div>
+          <div class="case__card">
+            <div class="case__flow-step-head">
+              <span class="case__step-number" aria-hidden="true">4</span>
+              <p class="case__step-title" data-i18n="case.aipp.flow.step4.title">Результат</p>
+            </div>
+            <p class="case__step-desc" data-i18n="case.aipp.flow.step4.desc">Один из трёх вариантов: «всё safe», «исправить один шаг» или «ИИ здесь не разрешён» (почему и что делать вместо этого). Без баллов — свои попытки видит только сам сотрудник</p>
+          </div>
+          <div class="case__card">
+            <div class="case__flow-step-head">
+              <span class="case__step-number" aria-hidden="true">5</span>
+              <p class="case__step-title" data-i18n="case.aipp.flow.step5.title">Инструкция</p>
+            </div>
+            <p class="case__step-desc" data-i18n="case.aipp.flow.step5.desc">Какой инструмент, что убрать, что проверить, когда остановиться</p>
+          </div>
+          <div class="case__card">
+            <div class="case__flow-step-head">
+              <span class="case__step-number" aria-hidden="true">6</span>
+              <p class="case__step-title" data-i18n="case.aipp.flow.step6.title">Назад к работе</p>
+            </div>
+            <p class="case__step-desc" data-i18n="case.aipp.flow.step6.desc">Сотрудник выполняет реальную задачу в разрешённом инструменте</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="case__section">
+        <h2 class="case__section-heading" data-i18n="case.aipp.measure.heading">Что бы я измеряла</h2>
+        <div class="case__measure-grid">
+          <div class="case__card">
+            <p class="case__measure-label" data-i18n="case.aipp.measure.main.label">ГЛАВНАЯ</p>
+            <p class="case__measure-desc" data-i18n="case.aipp.measure.main.desc">Доля тех, кто открыл карточку задачи и дошёл до инструкции. Показывает завершение, а не безопасное использование ИИ на практике</p>
+          </div>
+          <div class="case__card">
+            <p class="case__measure-label" data-i18n="case.aipp.measure.speed.label">СКОРОСТЬ</p>
+            <p class="case__measure-desc" data-i18n="case.aipp.measure.speed.desc">Время на поиск правила и время на выполнение упражнения — отслеживаются отдельно</p>
+          </div>
+          <div class="case__card">
+            <p class="case__measure-label" data-i18n="case.aipp.measure.errors.label">ОШИБКИ</p>
+            <p class="case__measure-desc" data-i18n="case.aipp.measure.errors.desc">Самые частые ошибки — в виде сводки по группе для L&amp;D</p>
+          </div>
+          <div class="case__card">
+            <p class="case__measure-label" data-i18n="case.aipp.measure.guardrail.label">ОГРАНИЧИТЕЛЬ</p>
+            <p class="case__measure-desc" data-i18n="case.aipp.measure.guardrail.desc">На каком шаге люди бросают упражнение и как часто повторяют попытку</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="i18n.js" defer></script>
+</body>
+</html>

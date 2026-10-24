@@ -36,6 +36,39 @@
  * xs→xxs respectively). Also: the h3/body Figma text styles now specify letterSpacing:
  * 0 (confirmed via fresh get_design_context on node 810:462), so the -0.5px fixed
  * letter-spacing on date/description is removed.
+ *
+ * Updated 2026-10-23, by direct request ("добавь ссылку на портфолио unisync ... и на
+ * веб и а мобилку"): the whole card is now a real link (`<a class="project-card">`,
+ * not `<article>`) to the live Behance case — not from Figma (no link target exists
+ * in the spec), but matches the existing data-hover-cursor="see-case" custom cursor on
+ * .project-card__media, which already implied the card was meant to be clickable.
+ * text-decoration/color reset below follow the same pattern already used on
+ * experience-card__brand-name and header-nav-item, the other components that are
+ * real `<a>` tags wrapping multiple styled children.
+ *
+ * Added 2026-10-23, by direct request (second project card, Figma node 1020:527,
+ * "AI Practice Passport" / "Паспорт AI-практики" — a case still in progress, no
+ * live link yet): `.project-card__media--in-progress` + `.project-card__badge`
+ * below are a NEW modifier, not a copy of the UNISYNC card's media treatment.
+ * The Figma node's own case image is a pre-rendered mockup (blurred product
+ * screens behind a "Кейс в разработке" pill, baked into one flat PNG) — like
+ * every other raster asset in this project, it couldn't be downloaded (the
+ * figma.com asset host is blocked in this environment, see claude.md §5
+ * Folder for the same limitation hit earlier). Rather than fake a product
+ * screenshot that doesn't exist, this is a plain placeholder: a soft gradient
+ * fill standing in for "blurred UI" plus the same status pill as a real
+ * element (so its text can be translated via data-i18n, unlike baked-in
+ * pixels). This card is NOT a link (`<article>`, no href, no
+ * data-hover-cursor) — there's no case to open yet.
+ *
+ * Updated 2026-10-23 (same day, later): the AI Practice Passport card IS now
+ * a link (`<a href="case-ai-practice-passport.html">`, same pattern as the
+ * UNISYNC card above but to an internal page, no target/rel) — by direct
+ * request ("теперь перенеси эту страницу. она должна открываться при
+ * нажатии на see case - AI Passport"), once the case page itself existed to
+ * link to. Still uses `.project-card__media--in-progress` + `.project-card__badge`
+ * below, since there's still no real case screenshot — only the link target
+ * changed, not the placeholder visual.
  */
 
 .project-card {
@@ -44,6 +77,8 @@
   align-items: flex-start;
   gap: var(--space-s);
   width: 100%;
+  text-decoration: none;
+  color: inherit;
 }
 
 .project-card__media {
@@ -64,6 +99,29 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* "In progress" placeholder — see the dated comment at the top of this file.
+   Used instead of an <img> when there's no case image yet. */
+.project-card__media--in-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e7e7ea 0%, #d4d7dd 55%, #b9c0cc 100%);
+}
+
+.project-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xxs) var(--space-s);
+  border-radius: 999px;
+  background: var(--color-surface-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-text);
+  font-size: var(--font-size-body);
+  line-height: 1.3;
+  white-space: nowrap;
 }
 
 .project-card__body {
@@ -138,5 +196,8 @@
   .project-card__title {
     font-size: 24px; /* literal Figma value for this node, not --font-size-h2 (40px desktop / 32px mobile-token) */
     font-weight: 700; /* Bold, literal — differs from desktop's --font-weight-h2 (500 Medium) */
+  }
+  .project-card__badge {
+    font-size: 16px; /* font/size/body (mobile), matches .project-card__date/__description above */
   }
 }

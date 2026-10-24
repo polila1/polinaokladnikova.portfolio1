@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>About — Polina, Product &amp; Visual Designer</title>
+<title data-i18n="meta.title.about">Обо мне — Полина, продуктовый и визуальный дизайнер</title>
 <link rel="stylesheet" href="tokens/index.css" />
 <link rel="stylesheet" href="components/header-nav-item/header-nav-item.css" />
 <link rel="stylesheet" href="components/header/header.css" />
@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="components/experience-card/experience-card.css" />
 <link rel="stylesheet" href="components/for-hovering/for-hovering.css" />
 <link rel="stylesheet" href="components/page-transition/page-transition.css" />
+<link rel="stylesheet" href="components/language-toggle/language-toggle.css" />
 <style>
   /**
    * About page layout — Figma source: node 815:393 "about screen".
@@ -147,6 +148,24 @@
     width: 100%;
   }
 
+  /* Added 2026-10-23, by direct request ("добавим раздел курсов"): group
+     labels above the Courses and Work Experience card groups. NOT from
+     Figma — this node never had any heading above its card list at all, so
+     there's no spec to match; weight/size are a plain reuse of the h2 token
+     pair already used elsewhere on this page (project-card__title on the
+     homepage uses the same pair), just to keep the type scale closed rather
+     than inventing a new size. Plain flex children of .about__experience —
+     same column, same gap as the cards around them. */
+  .about__section-heading {
+    margin: 0;
+    width: 100%;
+    color: var(--color-text-primary);
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-h2);
+    font-size: var(--font-size-h3);
+    line-height: 1.1;
+  }
+
   /* Responsive additions, not from Figma (no breakpoint tokens yet) */
   @media (max-width: 1600px) {
     /* indent/xxl (120px on the current scale) only makes sense on very wide
@@ -224,6 +243,9 @@
     .about__experience {
       gap: 24px; /* indent/m (mobile), was var(--space-m)/40px — each card's own mobile layout (experience-card.css) needs no changes here */
     }
+    .about__section-heading {
+      font-size: 20px; /* font/size/h3 (mobile), was var(--font-size-h3)/24px on desktop — matches header-nav-item's own mobile step */
+    }
 
     /* ---------- footer (Email / LinkedIn / CV) ---------- */
     /* Added 2026-09-07, by direct request: these three links should read at
@@ -294,19 +316,26 @@
     }
   }
 </style>
+<!-- Contentsquare (ex-Hotjar) analytics tag — added 2026-10-09, see claude.md §10 -->
+<script src="https://t.contentsquare.net/uxa/0a1e43774b1bd.js" defer></script>
 </head>
 <body>
   <div class="about">
     <nav class="header">
       <a class="header-nav-item" href="index.html">
-        <span class="header-nav-item__label">Projects</span>
+        <span class="header-nav-item__label" data-i18n="nav.projects">Проекты</span>
       </a>
       <a class="header-nav-item header-nav-item--active" href="about.html" aria-current="page">
-        <span class="header-nav-item__label">About me</span>
+        <span class="header-nav-item__label" data-i18n="nav.about">Обо мне</span>
       </a>
       <a class="header-nav-item" href="https://www.linkedin.com/in/polina-okladnikova-650309394/" target="_blank" rel="noopener noreferrer">
         <span class="header-nav-item__label">LinkedIn</span>
       </a>
+      <div class="language-toggle" role="group" aria-label="Language / Язык">
+        <button type="button" class="language-toggle__option" data-lang-switch="ru" aria-pressed="true">RU</button>
+        <span class="language-toggle__divider" aria-hidden="true">/</span>
+        <button type="button" class="language-toggle__option" data-lang-switch="en" aria-pressed="false">EN</button>
+      </div>
     </nav>
 
     <!-- Mobile-only menu (≤640px) — replaces the .header nav above with a
@@ -318,14 +347,19 @@
     </button>
     <nav class="mobile-nav" id="mobile-nav" hidden>
       <a class="header-nav-item" href="index.html">
-        <span class="header-nav-item__label">Projects</span>
+        <span class="header-nav-item__label" data-i18n="nav.projects">Проекты</span>
       </a>
       <a class="header-nav-item header-nav-item--active" href="about.html" aria-current="page">
-        <span class="header-nav-item__label">About me</span>
+        <span class="header-nav-item__label" data-i18n="nav.about">Обо мне</span>
       </a>
       <a class="header-nav-item" href="https://www.linkedin.com/in/polina-okladnikova-650309394/" target="_blank" rel="noopener noreferrer">
         <span class="header-nav-item__label">LinkedIn</span>
       </a>
+      <div class="language-toggle" role="group" aria-label="Language / Язык">
+        <button type="button" class="language-toggle__option" data-lang-switch="ru" aria-pressed="true">RU</button>
+        <span class="language-toggle__divider" aria-hidden="true">/</span>
+        <button type="button" class="language-toggle__option" data-lang-switch="en" aria-pressed="false">EN</button>
+      </div>
     </nav>
 
     <div class="about__content">
@@ -334,17 +368,62 @@
           <img src="images/photo%20big.png" alt="Polina" />
         </div>
         <div class="about__text">
-          <h1 class="about__heading">Who I am</h1>
+          <h1 class="about__heading" data-i18n="about.heading">Кто я</h1>
           <div class="about__bio">
-            <p>I&rsquo;m a Product Designer with a background in Communication Design — I bring systems thinking to every interface I build. Over the past 4 years, I&rsquo;ve worked across brand identity, content design, and digital products for educational platforms and media brands, turning complex challenges into clear, scalable visual systems.</p>
-            <p>My approach combines strong visual craft with user-centered problem solving: prototyping and testing interfaces in Figma, running user interviews, and applying frameworks like JTBD and user flows to shape better product decisions.</p>
-            <p>I care about the details — from the way a design system scales across a team, to the way a single onboarding flow feels to a first-time user. Whether I&rsquo;m building from scratch or refining something that already exists, I look for the simplest, clearest path to a solution that works for both users and the business.</p>
-            <p>Currently open to Product Design and UI/UX roles — remote or relocation.</p>
+            <p data-i18n="about.bio.p1">Я продуктовый дизайнер с бэкграундом в коммуникационном дизайне — привношу системное мышление в каждый интерфейс, который создаю. За последние 4 года я работала над фирменным стилем, контент-дизайном и цифровыми продуктами для образовательных платформ и медиабрендов, превращая сложные задачи в понятные и масштабируемые визуальные системы.</p>
+            <p data-i18n="about.bio.p2">Мой подход сочетает сильную визуальную составляющую с решением задач, ориентированным на пользователя: прототипирование и тестирование интерфейсов в Figma, проведение пользовательских интервью и применение фреймворков вроде JTBD и user flow для более обоснованных продуктовых решений.</p>
+            <p data-i18n="about.bio.p3">Для меня важны детали — от того, как дизайн-система масштабируется на команду, до того, как ощущается онбординг для нового пользователя. Создаю ли я что-то с нуля или дорабатываю существующее — я ищу самый простой и понятный путь к решению, которое работает и для пользователей, и для бизнеса.</p>
+            <p data-i18n="about.bio.p4" data-i18n-only="en">Currently open to Product Design and UI/UX roles — remote or relocation.</p>
           </div>
         </div>
       </div>
 
       <div class="about__experience">
+        <!-- Added 2026-10-23, by direct request ("добавим раздел курсов").
+             Not from Figma — see .about__section-heading's CSS comment above
+             for why the heading styling was invented rather than matched. -->
+        <h2 class="about__section-heading" data-i18n="about.section.courses">Проекты / Курсы</h2>
+
+        <!-- Wannabelike / UNISYNC course project card — added 2026-10-23.
+             Logo supplied directly by the user (images/wannabelike.png);
+             plain <span> brand-name (not <a>) since no company URL was
+             given, same pattern as the Freelance card below. UNISYNC here
+             is the same case already linked from the homepage project card
+             (project.unisync.* / Behance), documented here as coursework. -->
+        <article class="experience-card">
+          <div class="experience-card__brand">
+            <span class="experience-card__logo">
+              <img src="images/wannabelike.png" alt="" />
+            </span>
+            <span class="experience-card__brand-name">
+              <span class="header-nav-item__label">Wannabelike</span>
+            </span>
+          </div>
+          <div class="experience-card__role">
+            <h3 class="experience-card__title" data-i18n="role.product_designer">Продуктовый дизайнер</h3>
+            <div class="experience-card__details">
+              <p class="experience-card__summary" data-i18n="exp.wannabelike.summary">UNISYNC — единое приложение для университетской жизни</p>
+              <ul class="experience-card__list">
+                <li class="experience-card__item">
+                  <span class="experience-card__marker" aria-hidden="true"></span>
+                  <p class="experience-card__item-text" data-i18n="exp.wannabelike.bullet1">Провела 4 интервью, синтезировала 14 JTBD-инсайтов и на их основе построила пользовательские сценарии и структуру экранов приложения (11 сценариев: расписание, оплата, бронирование, столовая, мероприятия, профиль)</p>
+                </li>
+                <li class="experience-card__item">
+                  <span class="experience-card__marker" aria-hidden="true"></span>
+                  <p class="experience-card__item-text" data-i18n="exp.wannabelike.bullet2">Спроектировала вайрфреймы, 40 экранов и дизайн-систему для них, ускорив прототипирование с помощью AI-инструментов</p>
+                </li>
+                <li class="experience-card__item">
+                  <span class="experience-card__marker" aria-hidden="true"></span>
+                  <p class="experience-card__item-text" data-i18n="exp.wannabelike.bullet3">Разработала концепцию дизайна, 3D-иллюстрации с помощью нейросетей и полноценную дизайн-систему (типографика, цвет, компоненты), задокументировала её, собрала весь процесс в кейс и получила положительный отклик от арт-директоров</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p class="experience-card__period"><span data-i18n="exp.wannabelike.period1">Апрель 2026 – </span><br /><span data-i18n="exp.wannabelike.period2">август 2026</span></p>
+        </article>
+
+        <h2 class="about__section-heading" data-i18n="about.section.experience">Опыт работы</h2>
+
         <article class="experience-card">
           <div class="experience-card__brand">
             <span class="experience-card__logo">
@@ -355,25 +434,26 @@
             </a>
           </div>
           <div class="experience-card__role">
-            <h3 class="experience-card__title">Communication Designer</h3>
+            <h3 class="experience-card__title" data-i18n="role.communication_designer">Коммуникационный дизайнер</h3>
             <div class="experience-card__details">
+              <p class="experience-card__summary" data-i18n="exp.foxford.summary">Foxford — платформа онлайн-обучения для учеников начальной и средней школы (6,5 млн+ пользователей)</p>
               <ul class="experience-card__list">
                 <li class="experience-card__item">
                   <span class="experience-card__marker" aria-hidden="true"></span>
-                  <p class="experience-card__item-text">Designed visuals for daily social content, supporting a combined reach of ~13–15M monthly views</p>
+                  <p class="experience-card__item-text" data-i18n="exp.foxford.bullet1">Работала над дизайн-системой и визуальными решениями для ежедневного продуктового контента с суммарным охватом ~20 млн просмотров в месяц</p>
                 </li>
                 <li class="experience-card__item">
                   <span class="experience-card__marker" aria-hidden="true"></span>
-                  <p class="experience-card__item-text">Cut content production time in half, by integrating AI tools (Claude, AI image generation) into the design workflow</p>
+                  <p class="experience-card__item-text" data-i18n="exp.foxford.bullet2">Оптимизировала процесс производства, внедрив AI-инструменты в рабочий процесс — время производства контента сократилось вдвое</p>
                 </li>
                 <li class="experience-card__item">
                   <span class="experience-card__marker" aria-hidden="true"></span>
-                  <p class="experience-card__item-text">Progressed 2 design interns to full team roles within 3–4 months, by mentoring them from entry level to junior designer</p>
+                  <p class="experience-card__item-text" data-i18n="exp.foxford.bullet3">Довела 2 стажёров до штатных junior-позиций за 3–4 месяца, выступая их наставником</p>
                 </li>
               </ul>
             </div>
           </div>
-          <p class="experience-card__period">Sept 2024 – <br />June 2026</p>
+          <p class="experience-card__period"><span data-i18n="exp.foxford.period1">Сент 2024 – </span><br /><span data-i18n="exp.foxford.period2">настоящее время</span></p>
         </article>
 
         <article class="experience-card">
@@ -382,30 +462,30 @@
               <img src="images/podbor.png" alt="" />
             </span>
             <a class="experience-card__brand-name" href="https://podbor.io/" target="_blank" rel="noopener noreferrer">
-              <span class="header-nav-item__label">Podbor &amp; Recrutach</span>
+              <span class="header-nav-item__label">Rekrutach</span>
             </a>
           </div>
           <div class="experience-card__role">
-            <h3 class="experience-card__title">Communication Designer</h3>
+            <h3 class="experience-card__title" data-i18n="role.communication_designer_pt">Коммуникационный дизайнер, частичная занятость</h3>
             <div class="experience-card__details">
-              <p class="experience-card__summary">Podbor &amp; Recrutach — a Russian-language media brand for IT recruiters (~11 500 subscribers)</p>
+              <p class="experience-card__summary" data-i18n="exp.podbor.summary">Rekrutach — медиа для IT-рекрутеров (~11 000 подписчиков)</p>
               <ul class="experience-card__list">
                 <li class="experience-card__item">
                   <span class="experience-card__marker" aria-hidden="true"></span>
-                  <p class="experience-card__item-text">Increased average post engagement by ~70% through a full visual redesign of key media assets</p>
+                  <p class="experience-card__item-text" data-i18n="exp.podbor.bullet1">Построила дизайн-систему с нуля для соцсетей и презентационных материалов, сократив время производства вдвое, а циклы правок — до одного раунда</p>
                 </li>
                 <li class="experience-card__item">
                   <span class="experience-card__marker" aria-hidden="true"></span>
-                  <p class="experience-card__item-text">Built a design system from scratch for social and presentation materials, cutting production time in half and revision cycles to one round</p>
+                  <p class="experience-card__item-text" data-i18n="exp.podbor.bullet2">Увеличила средний engagement постов на ~70% благодаря полному визуальному редизайну ключевых медиаматериалов</p>
                 </li>
                 <li class="experience-card__item">
                   <span class="experience-card__marker" aria-hidden="true"></span>
-                  <p class="experience-card__item-text">Aligned visual strategy with marketing, copywriting, and leadership through regular design reviews and stakeholder feedback</p>
+                  <p class="experience-card__item-text" data-i18n="exp.podbor.bullet3">Согласовывала визуальную стратегию с маркетингом, копирайтингом и руководством через регулярные дизайн-ревью и сбор обратной связи</p>
                 </li>
               </ul>
             </div>
           </div>
-          <p class="experience-card__period">Aug 2024 – <br />present</p>
+          <p class="experience-card__period"><span data-i18n="exp.podbor.period1">Авг 2025 – </span><br /><span data-i18n="exp.podbor.period2">настоящее время</span></p>
         </article>
 
         <article class="experience-card">
@@ -418,26 +498,26 @@
             </a>
           </div>
           <div class="experience-card__role">
-            <h3 class="experience-card__title">Visual Designer</h3>
+            <h3 class="experience-card__title" data-i18n="role.visual_designer">Дизайнер</h3>
             <div class="experience-card__details">
-              <p class="experience-card__summary">PICT Fest, annual career &amp; tech festival at ITMO University, a top-4 Russian technical university (~16 000 students)</p>
+              <p class="experience-card__summary" data-i18n="exp.itmo.summary">PICT Fest — ежегодный карьерный и технологический фестиваль в ИТМО, одном из топ-4 технических вузов России (~16 000 студентов)</p>
               <ul class="experience-card__list">
                 <li class="experience-card__item">
                   <span class="experience-card__marker" aria-hidden="true"></span>
-                  <p class="experience-card__item-text">Grew festival community from 0 to 150 members, by launching and managing a new social media group from scratch</p>
+                  <p class="experience-card__item-text" data-i18n="exp.itmo.bullet1">Спроектировала лендинг фестиваля, который утроил посещаемость год к году, привлекая новых участников</p>
                 </li>
                 <li class="experience-card__item">
                   <span class="experience-card__marker" aria-hidden="true"></span>
-                  <p class="experience-card__item-text">Increased festival attendance 3x year-over-year, primarily driven by a newly designed landing page that attracted new attendees</p>
+                  <p class="experience-card__item-text" data-i18n="exp.itmo.bullet2">Запустила и вела соцсети фестиваля с нуля, вырастив сообщество с 0 до 150 участников</p>
                 </li>
                 <li class="experience-card__item">
                   <span class="experience-card__marker" aria-hidden="true"></span>
-                  <p class="experience-card__item-text">Coordinated a 2-person design team, ensuring visual consistency across all promotional materials</p>
+                  <p class="experience-card__item-text" data-i18n="exp.itmo.bullet3">Координировала команду из 2 дизайнеров, обеспечивая визуальную консистентность всех промо-материалов</p>
                 </li>
               </ul>
             </div>
           </div>
-          <p class="experience-card__period">Oct 2023 – <br />Dec 2023</p>
+          <p class="experience-card__period"><span data-i18n="exp.itmo.period1">Окт 2023 – </span><br /><span data-i18n="exp.itmo.period2">дек 2023</span></p>
         </article>
 
         <article class="experience-card">
@@ -450,12 +530,12 @@
             </span>
           </div>
           <div class="experience-card__role">
-            <h3 class="experience-card__title">Communication &amp; UX/UI Designer</h3>
+            <h3 class="experience-card__title" data-i18n="role.freelance">Коммуникационный и UX/UI дизайнер</h3>
             <div class="experience-card__details">
-              <p class="experience-card__summary">Freelance — 20+ projects across branding and web design</p>
+              <p class="experience-card__summary" data-i18n="exp.freelance.summary">Фриланс — 20+ проектов в брендинге и веб-дизайне</p>
             </div>
           </div>
-          <p class="experience-card__period">Aug 2022 – <br />present</p>
+          <p class="experience-card__period"><span data-i18n="exp.freelance.period1">Авг 2022 – </span><br /><span data-i18n="exp.freelance.period2">настоящее время</span></p>
         </article>
       </div>
 
@@ -464,12 +544,13 @@
           <span class="header-nav-item__label">Email</span>
         </a>
         <a class="header-nav-item" href="#cv">
-          <span class="header-nav-item__label">CV</span>
+          <span class="header-nav-item__label" data-i18n="footer.cv">Резюме</span>
         </a>
       </nav>
     </div>
   </div>
 
+  <script src="i18n.js" defer></script>
   <script src="components/for-hovering/for-hovering.js" defer></script>
   <script>
     // Mobile hamburger menu (≤640px) — page-specific, not a shared

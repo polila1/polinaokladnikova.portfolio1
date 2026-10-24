@@ -1,9 +1,11 @@
 <!--
   Usage snippet: Project card
   Replace src/alt on the image with the real case screenshot for each project.
+  The whole card is a real link (<a>, not <article>) — point href at the live
+  case (Behance, a case study page, etc). Added 2026-10-23, by direct request.
 -->
 
-<article class="project-card">
+<a class="project-card" href="https://www.behance.net/gallery/252632583/Unisync-university-ecosystem" target="_blank" rel="noopener noreferrer">
   <div class="project-card__media">
     <img src="case-1.jpg" alt="UNISYNC app screens" />
   </div>
@@ -12,6 +14,26 @@
     <div class="project-card__content">
       <h2 class="project-card__title">The university ecosystem</h2>
       <p class="project-card__description">UNISYNC — the university experience as one connected digital ecosystem — combining academic tools, campus services, and student life in a simple and intuitive mobile app</p>
+    </div>
+  </div>
+</a>
+
+<!--
+  Variant: case still in progress, no link yet. Added 2026-10-23. A plain
+  <article> (no href, no data-hover-cursor) with a .project-card__media--in-progress
+  placeholder instead of an <img> — swap in a real <img> and switch back to
+  <a href="..."> once the case has somewhere to link to.
+-->
+
+<article class="project-card">
+  <div class="project-card__media project-card__media--in-progress">
+    <span class="project-card__badge">Case in progress</span>
+  </div>
+  <div class="project-card__body">
+    <p class="project-card__date">September 2026 – present</p>
+    <div class="project-card__content">
+      <h2 class="project-card__title">AI Practice Passport</h2>
+      <p class="project-card__description">A training simulator — try out your company’s AI rules on a task similar to your real one, then get clear instructions.</p>
     </div>
   </div>
 </article>

@@ -2,8 +2,16 @@
  * Radius tokens (rounding)
  * Source: Figma variables → design.tokens.json (mode: "design")
  * Use for border-radius instead of raw px values.
+ *
+ * Added 2026-10-23, porting the "case: AI Practice Passport" Figma frame
+ * (node 1025:779) into case-ai-practice-passport.html: rounding/l
+ * (VariableID:1021:1141, web mode = 20px) is a second rounding token,
+ * smaller than rounding/xl — confirmed via get_variable_defs on the case
+ * frame, bound to every card/section border-radius on that page (stat
+ * tiles, flow-step cards, measure cards). Not used anywhere else yet.
  */
 
 :root {
   --radius-xl: 40px;
+  --radius-l: 20px;
 }

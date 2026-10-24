@@ -1,0 +1,54 @@
+/**
+ * Component: Language toggle
+ * Not from Figma — added 2026-10-23, by direct request ("переключатель
+ * EN/RU"): the site now has English and Russian copy, switched client-side
+ * (see /i18n.js, loaded on index.html and about.html). This is a small
+ * RU / EN switch placed as the last item in both the desktop header nav and
+ * the mobile dropdown nav, right after the LinkedIn link — it reuses the
+ * same font/size/color tokens as header-nav-item so it reads as part of the
+ * nav row rather than a separate control, but is a <button>, not an <a>,
+ * since it doesn't navigate anywhere.
+ *
+ * Requires /tokens/index.css to be loaded on the page before this file.
+ */
+
+.language-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  padding-bottom: var(--space-xxxs); /* aligns the baseline with header-nav-item's reserved active-underline space */
+}
+
+.language-toggle__option {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-bottom: 1px solid transparent; /* reserved so aria-pressed="true" doesn't shift layout — same pattern as header-nav-item */
+  background: none;
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-text);
+  font-size: var(--font-size-h3);
+  line-height: 1.1;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 200ms ease; /* matches header-nav-item's hover transition */
+}
+
+.language-toggle__option:hover {
+  color: var(--color-text-primary);
+}
+
+/* Active language — same underline treatment as header-nav-item--active,
+   so "current" reads consistently across both controls. */
+.language-toggle__option[aria-pressed="true"] {
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-text-primary);
+  cursor: default;
+}
+
+.language-toggle__divider {
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-text);
+  font-size: var(--font-size-h3);
+  line-height: 1.1;
+}

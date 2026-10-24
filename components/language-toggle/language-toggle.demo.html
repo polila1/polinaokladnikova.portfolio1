@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Language toggle — demo</title>
+<link rel="stylesheet" href="../../tokens/index.css" />
+<link rel="stylesheet" href="./language-toggle.css" />
+<style>
+  body {
+    margin: 0;
+    background: var(--color-surface-background);
+    display: flex;
+    justify-content: center;
+    padding: var(--space-l) var(--space-m);
+  }
+</style>
+</head>
+<body>
+  <div class="language-toggle" role="group" aria-label="Language / Язык">
+    <button type="button" class="language-toggle__option" data-lang-switch="ru" aria-pressed="true">RU</button>
+    <span class="language-toggle__divider" aria-hidden="true">/</span>
+    <button type="button" class="language-toggle__option" data-lang-switch="en" aria-pressed="false">EN</button>
+  </div>
+  <script>
+    // Demo-only: toggles aria-pressed so you can see both states. The real
+    // pages drive this via /i18n.js, which also re-renders page text.
+    document.querySelectorAll('.language-toggle__option').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.language-toggle__option').forEach(function (b) {
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+      });
+    });
+  </script>
+</body>
+</html>
