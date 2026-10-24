@@ -246,6 +246,36 @@
       white-space: normal;
     }
 
+    /* Fixed 2026-10-24, by direct request with screenshots ("на мобилке на
+       русском... уменьши текст, чтобы текст влезал в три строки как на
+       англ... фамилия и опыт в годах в две строки — сделай так чтобы они
+       были в одну строку"): on Polina's actual phone, the Cyrillic glyphs
+       in the real Helvetica Neue render noticeably wider than the Latin
+       ones this 56px/16px sizing was tuned against (our sandbox's fallback
+       font doesn't show this — only caught via her screenshots), so the RU
+       hero title and meta line need to be a step smaller than EN to fit the
+       same way. Scoped with the html[lang="ru"] attribute selector, which
+       i18n.js already keeps in sync with the active language (applyLanguage
+       sets it on every toggle, and it's "ru" by default) — not a new
+       mechanism, just the first CSS rule to read it.
+       Also: the hero__title copy itself ("Я продуктовый и визуальный
+       дизайнер") had picked up non-breaking spaces from the site-wide
+       "занеси в стили... отступы" nbsp pass (see claude.md, "Неразрывные
+       пробелы"), which glued all but one word pair together and left the
+       line with nowhere to wrap — that's what actually produced the
+       overflow in the screenshot, not just font size. Removed here (plain
+       breakable spaces restored in the markup and in i18n.js) since a short,
+       responsively-wrapping hero headline isn't the kind of fixed-width
+       prose that rule was meant for. */
+    html[lang="ru"] .hero__title {
+      font-size: 46px;
+      letter-spacing: -1.38px; /* -3% of 46px, same ratio as above */
+    }
+    html[lang="ru"] .hero__meta-name,
+    html[lang="ru"] .hero__meta-experience {
+      font-size: 14px;
+    }
+
     /* ---------- footer (Email / LinkedIn / CV) ---------- */
     /* Added 2026-09-07, by direct request: these three links should read at
        body-mobile size, not the header-nav-item component's default h3 size
@@ -380,7 +410,7 @@
             <p class="hero__muted" data-i18n="hero.name.intro">Меня зовут Полина</p>
           </div>
         </div>
-        <p class="hero__title" data-i18n="hero.title">Я продуктовый и визуальный дизайнер</p>
+        <p class="hero__title" data-i18n="hero.title">Я продуктовый и визуальный дизайнер</p>
         <p class="hero__subtitle" data-i18n="hero.subtitle">с 4-летним опытом работы</p>
       </div>
     </div>

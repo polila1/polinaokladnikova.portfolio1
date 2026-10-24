@@ -52,7 +52,7 @@
     'hero.meta.experience': { en: '4 years of experience', ru: '4 года опыта' },
     'hero.hello': { en: 'Hello!', ru: 'Привет!' },
     'hero.name.intro': { en: 'My name is Polina', ru: 'Меня зовут Полина' },
-    'hero.title': { en: 'I’m a product and visual designer', ru: 'Я продуктовый и визуальный дизайнер' },
+    'hero.title': { en: 'I’m a product and visual designer', ru: 'Я продуктовый и визуальный дизайнер' },
     'hero.subtitle': { en: 'with 4 years of experience', ru: 'с 4-летним опытом работы' },
 
     // ---------- index.html project card (UNISYNC) ----------
